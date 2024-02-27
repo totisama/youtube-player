@@ -33,12 +33,6 @@ const Error = styled.strong`
   font-size: 32px;
 `
 
-interface SWRValues {
-  data: VideoInterface[]
-  error: string
-  isLoading: boolean
-}
-
 interface VideoInterface {
   id: ID
   url: string
@@ -73,7 +67,7 @@ interface Thumbnails {
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
 export const VideosList = ({ name = '' }: { name: string }) => {
-  const { data, error, isLoading } = useSWR<SWRValues>(
+  const { data, error, isLoading } = useSWR<VideoInterface[]>(
     `https://youtube.thorsteinsson.is/api/search?q=${name}`,
     fetcher,
   )
