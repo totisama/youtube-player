@@ -1,7 +1,6 @@
-import './App.css'
 import styled from 'styled-components'
 import { useState } from 'react'
-import { VideosList } from './components/VideosList'
+import { VideosList } from '../components/VideosList'
 
 const Page = styled.div`
   width: 100%;
@@ -21,7 +20,7 @@ const Container = styled.main`
 `
 
 const Form = styled.form`
-  background: #ffffff;
+  background: #222222;
   width: 50%;
   display: flex;
   margin: 0 auto;
@@ -32,12 +31,11 @@ const Form = styled.form`
 
 const ButtonForm = styled.button`
   outline: 0;
-  background: #282c34;
   min-width: 100px;
   width: 20%;
   height: 50px;
-  border: 0;
-  color: #ffffff;
+  border: 2px solid #000000;
+  color: #000000;
   font-size: 14px;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -57,13 +55,13 @@ const Input = styled.input`
   width: 100%;
   height: 50px;
   border-radius: 5px;
-  border: 2px solid #282c34;
+  border: 2px solid #000000;
   padding: 15px;
   box-sizing: border-box;
   font-size: 14px;
 `
 
-export default function App() {
+export default function Home() {
   const [name, setName] = useState('')
 
   const submit = (e: React.FormEvent<HTMLFormElement>) => {

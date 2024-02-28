@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import useSWR from 'swr'
 
@@ -8,7 +9,7 @@ const List = styled.section`
   justify-content: center;
 `
 
-const Video = styled.a`
+const Video = styled(Link)`
   background: #5d6f93;
   width: 100%;
   max-width: 300px;
@@ -80,12 +81,7 @@ export const VideosList = ({ name = '' }: { name: string }) => {
   return (
     <List>
       {data?.map((video) => (
-        <Video
-          key={video.id.videoID}
-          href={video.url}
-          target="_blank"
-          rel="noreferrer"
-        >
+        <Video key={video.id.videoID} to={`/detail/${video.id.videoID}`}>
           <img src={video.snippet.thumbnails.url} alt={video.title} />
           <h1>{video.title}</h1>
           <h2>{video.channelName}</h2>
