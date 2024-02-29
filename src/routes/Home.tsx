@@ -1,16 +1,10 @@
 import styled from 'styled-components'
 import { VideosList } from '../components/VideosList'
 import { useSearchParams } from 'react-router-dom'
-
-const Page = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: start;
-`
+import { EmbedVideo } from '../components/EmbedVideo'
 
 const Container = styled.main`
-  width: 90%;
+  width: 100%;
   padding: 15px;
   gap: 10px;
   text-align: center;
@@ -22,12 +16,12 @@ const Container = styled.main`
 export default function Home() {
   const [searchParams] = useSearchParams()
   const titleParam = searchParams.get('title') || ''
+  const videoIdParam = searchParams.get('videoId') || ''
 
   return (
-    <Page>
-      <Container>
-        {titleParam !== '' && <VideosList titleParam={titleParam} />}
-      </Container>
-    </Page>
+    <Container>
+      {titleParam !== '' && <VideosList titleParam={titleParam} />}
+      {videoIdParam !== '' && <EmbedVideo videoId={videoIdParam} />}
+    </Container>
   )
 }
