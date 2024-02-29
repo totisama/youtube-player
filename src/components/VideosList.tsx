@@ -78,8 +78,6 @@ export const VideosList = ({ titleParam = '' }: { titleParam: string }) => {
   if (isLoading) return <div>Loading...</div>
   if (error) return <Error>Error loading videos</Error>
 
-  console.log(videos)
-
   return (
     <List>
       {videos?.map((video) => (
