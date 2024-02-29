@@ -54,11 +54,16 @@ export const SearchForm = () => {
 
     const value = form.name.value
 
+    if (value === '') {
+      navigate('/')
+      return
+    }
+
     const search = new URLSearchParams()
     search.set('title', value)
 
     setSearchParams(search)
-    navigate('/?title=' + value)
+    navigate(`/?title=${value}`)
   }
 
   return (
