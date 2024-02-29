@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 
 const Form = styled.form`
   background: #222222;
@@ -44,6 +44,8 @@ const Input = styled.input`
 export const SearchForm = () => {
   const [, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
+  const location = useLocation()
+  const { pathname } = location
 
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -55,21 +57,27 @@ export const SearchForm = () => {
     const value = form.name.value
 
     if (value === '') {
-      navigate('/')
       return
     }
 
     const search = new URLSearchParams()
+
+    if (pathname.includes('/detail')) {
+      search.set('videoId', pathname.split('/')[2])
+    }
+
     search.set('title', value)
 
     setSearchParams(search)
-    navigate(`/?title=${value}`)
+    navigate('/?' + search.toString())
   }
 
   return (
-    <Form onSubmit={submit}>
-      <Input type="text" name="name" placeholder="Search" />
-      <ButtonForm>Search videos</ButtonForm>
-    </Form>
+    <section>
+      <Form onSubmit={submit}>
+        <Input type="text" name="name" placeholder="Search" />
+        <ButtonForm>Search videos</ButtonForm>
+      </Form>
+    </section>
   )
 }
