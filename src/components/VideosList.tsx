@@ -1,18 +1,18 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import useSWR from 'swr'
+import { fetcher, formatViews } from '../utils'
+import { GeneralVideo } from '../types'
 
 const List = styled.section`
-  display: flex;
   flex-wrap: wrap;
   display: flex;
   justify-content: center;
 `
 
 const Video = styled(Link)`
-  background: #5d6f93;
-  width: 100%;
-  max-width: 300px;
+  background: #222222;
+  max-width: 400px;
   padding: 20px;
   margin: 10px;
   border-radius: 10px;
@@ -22,11 +22,42 @@ const Video = styled(Link)`
   display: flex;
   flex-direction: column;
   text-decoration: none;
-  color: #282c34;
 
   &:hover {
     transform: scale(1.05);
   }
+`
+
+const InfoSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #f1f1f1;
+  text-align: left;
+  gap: 10px;
+`
+
+const ChannelName = styled.h2`
+  margin: 0;
+  color: #aaa;
+`
+
+const Image = styled.img`
+  width: 350px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+`
+
+const VideoTitle = styled.h1`
+  text-wrap: wrap;
+  font-size: 16px;
+  margin: 0;
+  margin-top: 10px;
+`
+
+const ExtraInfo = styled.span`
+  color: #aaa;
 `
 
 const Error = styled.strong`
@@ -34,65 +65,37 @@ const Error = styled.strong`
   font-size: 32px;
 `
 
-interface VideoInterface {
-  id: ID
-  url: string
-  title: string
-  channelName: string
-  description: string
-  durationRaw: string
-  snippet: Snippet
-  views: string
-}
-
-interface ID {
-  videoID: string
-}
-
-interface Snippet {
-  url: string
-  duration: string
-  publishedAt: string
-  thumbnails: Thumbnails
-  title: string
-  views: string
-}
-
-interface Thumbnails {
-  id: string
-  url: string
-  height: number
-  width: number
-}
-
-const fetcher = (...args) => fetch(...args).then((res) => res.json())
-
-export const VideosList = ({ name = '' }: { name: string }) => {
-  const { data, error, isLoading } = useSWR<VideoInterface[]>(
-    `https://youtube.thorsteinsson.is/api/search?q=${name}`,
+export const VideosList = ({ titleParam = '' }: { titleParam: string }) => {
+  const {
+    data: videos,
+    error,
+    isLoading,
+  } = useSWR<GeneralVideo[]>(
+    `https://youtube.thorsteinsson.is/api/search?q=${titleParam}`,
     fetcher,
   )
 
   if (isLoading) return <div>Loading...</div>
-  if (error) return <Error>Error loading repos</Error>
+  if (error) return <Error>Error loading videos</Error>
 
-  console.log(data)
+  console.log(videos)
 
   return (
     <List>
-      {data?.map((video) => (
-        <Video key={video.id.videoID} to={`/detail/${video.id.videoID}`}>
-          <img src={video.snippet.thumbnails.url} alt={video.title} />
-          <h1>{video.title}</h1>
-          <h2>{video.channelName}</h2>
-          {video.description !== null && (
-            <p>
-              <strong>Description:</strong>
-              <br />
-              {video.description}
-            </p>
-          )}
-          Total views: {video.views}
+      {videos?.map((video) => (
+        <Video
+          // video.id.videoId doesnt work
+          key={video.snippet.thumbnails.id}
+          to={`/detail/${video.snippet.thumbnails.id}`}
+        >
+          <Image src={video.snippet.thumbnails.url} alt={video.title} />
+          <InfoSection>
+            <VideoTitle>{video.title}</VideoTitle>
+            <ChannelName>{video.channelName}</ChannelName>
+            <ExtraInfo>
+              {formatViews(video.views)} views · {video.snippet.publishedAt}
+            </ExtraInfo>
+          </InfoSection>
         </Video>
       ))}
     </List>
