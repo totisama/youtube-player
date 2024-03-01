@@ -1,16 +1,42 @@
 import styled from 'styled-components'
 import { fetcher } from '../utils'
-import { CurrentVideoContextType, Video } from '../types'
+import { Video } from '../types'
 import useSWR from 'swr'
-import { CurrentVideoContext } from '../context/CurrentVideo'
-import { useContext } from 'react'
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { YoutubeVideo } from './YoutubeVideo'
 
-const IFrame = styled.iframe`
+interface IFrameDivProps {
+  showvideo: boolean
+}
+
+interface RemoveButton {
+  showvideo: boolean
+}
+
+const IFrameDiv = styled(motion.div)<IFrameDivProps>`
   position: fixed;
-  bottom: 0;
+  bottom: 0px;
   right: 0;
-  width: 400px;
-  height: 225px;
+  background: #222222;
+  width: ${(props) => (props.showvideo ? '400px;' : '50px;')};
+  height: ${(props) => (props.showvideo ? '225px;' : '50px;')};
+`
+
+const RemoveButton = styled.button<RemoveButton>`
+  position: absolute;
+  color: #fff;
+  border: 0;
+  right: 0;
+  width: ${(props) => (props.showvideo ? '30px;' : '50px;')};
+  height: ${(props) => (props.showvideo ? '30px;' : '50px;')};
+  background: ${(props) =>
+    props.showvideo ? 'rgba(0, 0, 0, 0.5);' : '#222222;'};
+
+  &:hover {
+    background: #444444;
+    cursor: pointer;
+  }
 `
 
 export const EmbedVideo = ({ videoId }: { videoId: string }) => {
@@ -18,23 +44,30 @@ export const EmbedVideo = ({ videoId }: { videoId: string }) => {
     `https://youtube.thorsteinsson.is/api/videos/${videoId}`,
     fetcher,
   )
-  const { currentSeconds } = useContext(
-    CurrentVideoContext,
-  ) as CurrentVideoContextType
+  const [showVideo, setShowVideo] = useState(true)
 
   if (error || video === undefined) {
     return null
   }
 
   return (
-    <IFrame
-      width="400"
-      height="225"
-      src={`https://www.youtube.com/embed/${videoId}?autoplay=1&start=${currentSeconds}`}
-      title={video.title}
-      frameBorder={0}
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-    />
+    <IFrameDiv
+      showvideo={showVideo}
+      animate={{ height: showVideo ? 225 : 50, width: showVideo ? 400 : 50 }}
+      transition={{ duration: 0.5 }}
+    >
+      <RemoveButton
+        showvideo={showVideo}
+        onClick={() => setShowVideo(!showVideo)}
+      >
+        <motion.div
+          animate={{ rotate: showVideo ? 360 : 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          {showVideo ? 'X' : '✚'}
+        </motion.div>
+      </RemoveButton>
+      {showVideo && <YoutubeVideo videoId={videoId} width={400} height={225} />}
+    </IFrameDiv>
   )
 }

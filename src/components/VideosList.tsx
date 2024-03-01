@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import useSWR from 'swr'
 import { fetcher, formatViews } from '../utils'
 import { GeneralVideo } from '../types'
+import { motion } from 'framer-motion'
 
 const List = styled.section`
   flex-wrap: wrap;
@@ -81,20 +82,26 @@ export const VideosList = ({ searchParam = '' }: { searchParam: string }) => {
   return (
     <List>
       {videos?.map((video) => (
-        <Video
-          // video.id.videoId doesnt work
+        <motion.div
           key={video.snippet.thumbnails.id}
-          to={`/detail/${video.snippet.thumbnails.id}`}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
         >
-          <Image src={video.snippet.thumbnails.url} alt={video.title} />
-          <InfoSection>
-            <VideoTitle>{video.title}</VideoTitle>
-            <ChannelName>{video.channelName}</ChannelName>
-            <ExtraInfo>
-              {formatViews(video.views)} views · {video.snippet.publishedAt}
-            </ExtraInfo>
-          </InfoSection>
-        </Video>
+          <Video
+            // video.id.videoId doesnt work
+            to={`/detail/${video.snippet.thumbnails.id}`}
+          >
+            <Image src={video.snippet.thumbnails.url} alt={video.title} />
+            <InfoSection>
+              <VideoTitle>{video.title}</VideoTitle>
+              <ChannelName>{video.channelName}</ChannelName>
+              <ExtraInfo>
+                {formatViews(video.views)} views · {video.snippet.publishedAt}
+              </ExtraInfo>
+            </InfoSection>
+          </Video>
+        </motion.div>
       ))}
     </List>
   )
