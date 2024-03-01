@@ -12,7 +12,7 @@ const List = styled.section`
 
 const Video = styled(Link)`
   background: #222222;
-  max-width: 400px;
+  max-width: 390px;
   padding: 20px;
   margin: 10px;
   border-radius: 10px;
