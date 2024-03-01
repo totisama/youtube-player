@@ -56,3 +56,9 @@ export interface CurrentVideoContextType {
 export interface CurrentVideoProps {
   children: React.ReactNode
 }
+
+export interface YouTubeVideoProps {
+  videoId: string
+  width: number
+  height: number
+}
