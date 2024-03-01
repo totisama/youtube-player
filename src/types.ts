@@ -61,4 +61,5 @@ export interface YouTubeVideoProps {
   videoId: string
   width: number
   height: number
+  fromStart?: boolean
 }

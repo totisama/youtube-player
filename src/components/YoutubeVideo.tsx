@@ -3,11 +3,16 @@ import YouTube, { type YouTubeProps } from 'react-youtube'
 import { useContext, useRef } from 'react'
 import { CurrentVideoContext } from '../context/CurrentVideo'
 
-export const YoutubeVideo = ({ videoId, width, height }: YouTubeVideoProps) => {
+export const YoutubeVideo = ({
+  videoId,
+  width,
+  height,
+  fromStart = false,
+}: YouTubeVideoProps) => {
   const { currentSeconds, setCurrentSeconds } = useContext(
     CurrentVideoContext,
   ) as CurrentVideoContextType
-  const starSeconds = useRef(currentSeconds)
+  const starSeconds = useRef(fromStart ? 0 : currentSeconds)
   let intervalId: ReturnType<typeof setInterval> | null = null
 
   const opts: YouTubeProps['opts'] = {

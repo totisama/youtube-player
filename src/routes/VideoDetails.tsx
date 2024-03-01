@@ -63,7 +63,13 @@ export const VideoDetails = () => {
 
   return (
     <Page>
-      <YoutubeVideo videoId={id} width={1100} height={615} />
+      <YoutubeVideo
+        key={id}
+        videoId={id}
+        width={1100}
+        height={615}
+        fromStart={true}
+      />
       <Information>
         <TitleInfo>
           <Title>{video.title}</Title>
