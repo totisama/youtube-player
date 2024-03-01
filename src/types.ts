@@ -47,3 +47,12 @@ export interface Video {
   regionsAllowed: string[]
   likeCount: number
 }
+
+export interface CurrentVideoContextType {
+  currentSeconds: number
+  setCurrentSeconds: (seconds: number) => void
+}
+
+export interface CurrentVideoProps {
+  children: React.ReactNode
+}

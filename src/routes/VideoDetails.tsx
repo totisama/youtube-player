@@ -2,17 +2,16 @@ import styled from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { fetcher, formatViews } from '../utils'
 import useSWR from 'swr'
-import { Video } from '../types'
+import { CurrentVideoContextType, Video } from '../types'
+import YouTube, { type YouTubeProps } from 'react-youtube'
+import { useContext } from 'react'
+import { CurrentVideoContext } from '../context/CurrentVideo'
 
 const Page = styled.main`
   margin-top: 25px;
   padding: 0px 50px;
   color: white;
   padding-bottom: 100px;
-`
-
-const IFrame = styled.iframe`
-  border: 0;
 `
 
 const TitleInfo = styled.div`
@@ -59,22 +58,36 @@ export const VideoDetails = () => {
     `https://youtube.thorsteinsson.is/api/videos/${id}`,
     fetcher,
   )
+  const opts: YouTubeProps['opts'] = {
+    width: '1100',
+    height: '615',
+    playerVars: {
+      // https://developers.google.com/youtube/player_parameters
+      autoplay: 1,
+    },
+  }
+  const { setCurrentSeconds } = useContext(
+    CurrentVideoContext,
+  ) as CurrentVideoContextType
+  let intervalId: ReturnType<typeof setInterval> | null = null
 
-  // console.log(video)
+  const onPlay: YouTubeProps['onPlay'] = (event) => {
+    intervalId = setInterval(() => {
+      setCurrentSeconds(Math.floor(event.target.getCurrentTime()))
+    }, 1000)
+  }
+
+  const onPause: YouTubeProps['onPause'] = () => {
+    if (intervalId) clearInterval(intervalId)
+    intervalId = null
+  }
 
   if (isLoading) return <div>Loading...</div>
   if (error || video === undefined) return <Error>Error loading video</Error>
 
   return (
     <Page>
-      <IFrame
-        width="1100"
-        height="615"
-        src={`https://www.youtube.com/embed/${id}?autoplay=1`}
-        title={video.title}
-        frameBorder={0}
-        allowFullScreen
-      />
+      <YouTube videoId={id} opts={opts} onPlay={onPlay} onPause={onPause} />
       <Information>
         <TitleInfo>
           <Title>{video.title}</Title>

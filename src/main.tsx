@@ -5,15 +5,18 @@ import { VideoDetails } from './routes/VideoDetails.tsx'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { SearchForm } from './components/SearchForm.tsx'
 import './index.css'
+import { CurrentVideoProvider } from './context/CurrentVideo.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <SearchForm />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/detail/:id" element={<VideoDetails />} />
-      </Routes>
-    </BrowserRouter>
+    <CurrentVideoProvider>
+      <BrowserRouter>
+        <SearchForm />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/detail/:id" element={<VideoDetails />} />
+        </Routes>
+      </BrowserRouter>
+    </CurrentVideoProvider>
   </React.StrictMode>,
 )
