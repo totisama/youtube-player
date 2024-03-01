@@ -65,13 +65,13 @@ const Error = styled.strong`
   font-size: 32px;
 `
 
-export const VideosList = ({ titleParam = '' }: { titleParam: string }) => {
+export const VideosList = ({ searchParam = '' }: { searchParam: string }) => {
   const {
     data: videos,
     error,
     isLoading,
   } = useSWR<GeneralVideo[]>(
-    `https://youtube.thorsteinsson.is/api/search?q=${titleParam}`,
+    `https://youtube.thorsteinsson.is/api/search?q=${searchParam}`,
     fetcher,
   )
 

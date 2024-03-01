@@ -15,12 +15,12 @@ const Container = styled.main`
 
 export default function Home() {
   const [searchParams] = useSearchParams()
-  const titleParam = searchParams.get('title') || ''
+  const searchParam = searchParams.get('search') || ''
   const videoIdParam = searchParams.get('videoId') || ''
 
   return (
     <Container>
-      {titleParam !== '' && <VideosList titleParam={titleParam} />}
+      {searchParam !== '' && <VideosList searchParam={searchParam} />}
       {videoIdParam !== '' && <EmbedVideo videoId={videoIdParam} />}
     </Container>
   )

@@ -42,10 +42,11 @@ const Input = styled.input`
 `
 
 export const SearchForm = () => {
-  const [, setSearchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
   const location = useLocation()
   const { pathname } = location
+  const search = searchParams.get('search') || ''
 
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -66,7 +67,7 @@ export const SearchForm = () => {
       search.set('videoId', pathname.split('/')[2])
     }
 
-    search.set('title', value)
+    search.set('search', value)
 
     setSearchParams(search)
     navigate('/?' + search.toString())
@@ -75,7 +76,12 @@ export const SearchForm = () => {
   return (
     <section>
       <Form onSubmit={submit}>
-        <Input type="text" name="name" placeholder="Search" />
+        <Input
+          type="text"
+          name="name"
+          placeholder="Search"
+          defaultValue={search}
+        />
         <ButtonForm>Search videos</ButtonForm>
       </Form>
     </section>
