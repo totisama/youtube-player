@@ -55,6 +55,8 @@ const VideoTitle = styled.h1`
   font-size: 16px;
   margin: 0;
   margin-top: 10px;
+  min-height: 60px;
+  overflow: hidden;
 `
 
 const ExtraInfo = styled.span`
