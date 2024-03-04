@@ -7,18 +7,21 @@ import { CurrentVideoProvider } from './context/CurrentVideo.tsx'
 import { Playlists } from './routes/Playlists.tsx'
 import './index.css'
 import { NavBar } from './components/NavBar.tsx'
+import { ModalProvider } from 'styled-react-modal'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <CurrentVideoProvider>
-      <BrowserRouter>
-        <NavBar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/detail/:id" element={<VideoDetails />} />
-          <Route path="/playlists/" element={<Playlists />} />
-        </Routes>
-      </BrowserRouter>
+      <ModalProvider>
+        <BrowserRouter>
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/detail/:id" element={<VideoDetails />} />
+            <Route path="/playlists/" element={<Playlists />} />
+          </Routes>
+        </BrowserRouter>
+      </ModalProvider>
     </CurrentVideoProvider>
   </React.StrictMode>,
 )
