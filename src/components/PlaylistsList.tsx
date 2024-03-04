@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 const Section = styled.section`
@@ -12,7 +13,7 @@ const Section = styled.section`
 
 const Playlist = styled.article`
   background: #222222;
-  max-width: 390px;
+  width: 300px;
   padding: 20px;
   margin: 10px;
   border-radius: 10px;
@@ -29,12 +30,62 @@ const Playlist = styled.article`
   }
 `
 
+const PlaylistTitle = styled.h2`
+  font-size: 30px;
+  font-weight: 600;
+  text-align: center;
+  overflow: hidden;
+  margin: 0;
+`
+
+const Buttons = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+`
+
+const Button = styled.button`
+  outline: 0;
+  height: 40px;
+  border: 0;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 16px;
+  padding: 5px 15px;
+
+  &:hover {
+    scale: 0.95;
+  }
+`
+
 export const PlaylistsList = () => {
+  const [playlists, setPlaylists] = useState([])
+
+  useEffect(() => {
+    const retreivePlaylists = async () => {
+      // const response = await fetch(
+      //   'https://youtube.thorsteinsson.is/api/playlists/GiLxkJvBbgscD6urMm3a-',
+      // )
+      // const data = await response.json()
+      // console.log(data)
+      // setPlaylists(data.items)
+    }
+
+    retreivePlaylists()
+  }, [])
+
   return (
     <Section>
       <Playlist>
-        <h2>Playlist 1</h2>
-        <span>Songs: 1</span>
+        <PlaylistTitle>Playlist 1</PlaylistTitle>
+        <Buttons>
+          <Button>✍🏼 Edit</Button>
+          <Button>🗑️ Delete</Button>
+        </Buttons>
       </Playlist>
     </Section>
   )
