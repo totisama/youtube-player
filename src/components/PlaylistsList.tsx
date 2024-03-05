@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { supabase } from '../utils/supabase'
+import { Playlist } from '../types'
 
 const Section = styled.section`
   width: 100%;
@@ -63,16 +65,12 @@ const Button = styled.button`
 `
 
 export const PlaylistsList = () => {
-  const [playlists, setPlaylists] = useState([])
+  const [playlists, setPlaylists] = useState<Playlist[]>([])
 
   useEffect(() => {
     const retreivePlaylists = async () => {
-      // const response = await fetch(
-      //   'https://youtube.thorsteinsson.is/api/playlists/GiLxkJvBbgscD6urMm3a-',
-      // )
-      // const data = await response.json()
-      // console.log(data)
-      // setPlaylists(data.items)
+      const { data } = await supabase.from('playlists').select()
+      setPlaylists(data)
     }
 
     retreivePlaylists()
@@ -80,13 +78,15 @@ export const PlaylistsList = () => {
 
   return (
     <Section>
-      <Playlist>
-        <PlaylistTitle>Playlist 1</PlaylistTitle>
-        <Buttons>
-          <Button>✍🏼 Edit</Button>
-          <Button>🗑️ Delete</Button>
-        </Buttons>
-      </Playlist>
+      {playlists.map((playlist) => (
+        <Playlist key={playlist.id}>
+          <PlaylistTitle>{playlist.name}</PlaylistTitle>
+          <Buttons>
+            <Button>✍🏼 Edit</Button>
+            <Button>🗑️ Delete</Button>
+          </Buttons>
+        </Playlist>
+      ))}
     </Section>
   )
 }

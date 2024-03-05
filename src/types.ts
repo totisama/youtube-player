@@ -63,3 +63,8 @@ export interface YouTubeVideoProps {
   height: number
   fromStart?: boolean
 }
+
+export interface Playlist {
+  id: string
+  name: string
+}
