@@ -55,7 +55,7 @@ const CreateButton = styled.button`
   }
 `
 
-export const ModelCreatePlaylist = ({
+export const ModalCreatePlaylist = ({
   isOpen,
   toggleModal,
 }: {

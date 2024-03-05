@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { PlaylistsList } from '../components/PlaylistsList'
 import { useState } from 'react'
-import { ModelCreatePlaylist } from '../components/ModelCreatePlaylist'
+import { ModalCreatePlaylist } from '../components/ModalCreatePlaylist'
 
 const Main = styled.main`
   display: flex;
@@ -63,7 +63,7 @@ export const Playlists = () => {
         <AddNewButton onClick={toggleModal}>+</AddNewButton>
       </TitleSection>
       <PlaylistsList />
-      <ModelCreatePlaylist isOpen={isOpen} toggleModal={toggleModal} />
+      <ModalCreatePlaylist isOpen={isOpen} toggleModal={toggleModal} />
     </Main>
   )
 }
