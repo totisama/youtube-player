@@ -64,12 +64,26 @@ const Button = styled.button`
   }
 `
 
+const Error = styled.strong`
+  padding: 50px;
+  font-size: 32px;
+  color: white;
+`
+
 export const PlaylistsList = () => {
   const [playlists, setPlaylists] = useState<Playlist[]>([])
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const retreivePlaylists = async () => {
       const { data } = await supabase.from('playlists').select()
+
+      if (!data) {
+        setError('There was a problem getting the playlists')
+        setPlaylists([])
+        return
+      }
+
       setPlaylists(data)
     }
 
@@ -87,6 +101,7 @@ export const PlaylistsList = () => {
           </Buttons>
         </Playlist>
       ))}
+      {error && <Error>{error}</Error>}
     </Section>
   )
 }
