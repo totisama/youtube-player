@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import Modal from 'styled-react-modal'
+import { supabase } from '../utils/supabase'
 
 const StyledModal = Modal.styled`
   width: 20rem;
@@ -73,16 +74,8 @@ export const ModelCreatePlaylist = ({
       return
     }
 
-    const res = await fetch('https://youtube.thorsteinsson.is/api/playlists', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name: value }),
-    })
+    await supabase.from('playlists').insert({ name: value })
 
-    console.log('res', res)
-    console.log('res2', await res.json())
     toggleModal()
   }
 
