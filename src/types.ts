@@ -78,3 +78,9 @@ export interface VideoDB {
   id: string
   video_id: string
 }
+
+export interface PlaylistVideo {
+  id: string
+  playlist_id: string
+  video_id: string
+}
