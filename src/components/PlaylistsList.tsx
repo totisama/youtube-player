@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { supabase } from '../utils/supabase'
 import { Playlist } from '../types'
+import { Link } from 'react-router-dom'
 
 const Section = styled.section`
   width: 100%;
@@ -13,13 +14,12 @@ const Section = styled.section`
   margin-top: 50px;
 `
 
-const Playlist = styled.article`
+const PlaylistCard = styled(Link)`
   background: #222222;
   width: 300px;
   padding: 20px;
   margin: 10px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   cursor: pointer;
   display: flex;
@@ -28,7 +28,7 @@ const Playlist = styled.article`
   color: white;
 
   &:hover {
-    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
   }
 `
 
@@ -38,6 +38,12 @@ const PlaylistTitle = styled.h2`
   text-align: center;
   overflow: hidden;
   margin: 0;
+`
+
+const PlaylistDescription = styled.p`
+  font-size: 16px;
+  text-align: center;
+  margin: 10px 0;
 `
 
 const Buttons = styled.div`
@@ -60,7 +66,7 @@ const Button = styled.button`
   padding: 5px 15px;
 
   &:hover {
-    scale: 0.95;
+    scale: 1.1;
   }
 `
 
@@ -73,6 +79,17 @@ const Error = styled.strong`
 export const PlaylistsList = () => {
   const [playlists, setPlaylists] = useState<Playlist[]>([])
   const [error, setError] = useState<string | null>(null)
+
+  const deletePlaylist = async (id: string) => {
+    const { error } = await supabase.from('playlists').delete().eq('id', id)
+
+    if (error) {
+      setError('There was a problem deleting the playlist')
+      return
+    }
+
+    setPlaylists(playlists.filter((playlist) => playlist.id !== id))
+  }
 
   useEffect(() => {
     const retreivePlaylists = async () => {
@@ -93,13 +110,20 @@ export const PlaylistsList = () => {
   return (
     <Section>
       {playlists.map((playlist) => (
-        <Playlist key={playlist.id}>
+        <PlaylistCard to={`/playlists/${playlist.id}`} key={playlist.id}>
           <PlaylistTitle>{playlist.name}</PlaylistTitle>
+          <PlaylistDescription>{playlist.description}</PlaylistDescription>
           <Buttons>
             <Button>✍🏼 Edit</Button>
-            <Button>🗑️ Delete</Button>
+            <Button
+              onClick={() => {
+                deletePlaylist(playlist.id)
+              }}
+            >
+              🗑️ Delete
+            </Button>
           </Buttons>
-        </Playlist>
+        </PlaylistCard>
       ))}
       {error && <Error>{error}</Error>}
     </Section>
