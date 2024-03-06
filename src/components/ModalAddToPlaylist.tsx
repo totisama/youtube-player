@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import Modal from 'styled-react-modal'
 import { supabase } from '../utils/supabase'
 import { useEffect, useState } from 'react'
-import { Playlist } from '../types'
+import { Playlist, VideoDB } from '../types'
 
 const StyledModal = Modal.styled`
   width: 20rem;
@@ -71,27 +71,57 @@ const Error = styled.strong`
 export const ModalAddToPlaylist = ({
   isOpen,
   toggleModal,
+  videoId,
 }: {
   isOpen: boolean
   toggleModal: () => void
+  videoId: string
 }) => {
   const [playlists, setPlaylists] = useState<Playlist[]>([])
   const [error, setError] = useState<string | null>(null)
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const form = e.target as typeof e.currentTarget & {
-      name: { value: string }
+    const { playlist } = e.target as typeof e.currentTarget & {
+      playlist: { value: string }
     }
 
-    const value = form.name.value
+    const playlistId = playlist.value
 
-    if (!value) {
+    if (!playlistId) {
       setError('Select a playlist')
       return
     }
 
-    await supabase.from('playlists').insert({ name: value })
+    console.log(playlists)
+    console.log(playlistId)
+
+    const selectedPlaylist = playlists.find(
+      (playlist) => String(playlist.id) === String(playlistId),
+    )
+    if (!selectedPlaylist) {
+      setError('There was an error')
+      return
+    }
+
+    const { error, data } = await supabase
+      .from('video')
+      .insert({ video_id: videoId })
+      .select()
+
+    if (error || !data || data.length === 0) {
+      setError('There was an error')
+      return
+    }
+
+    await supabase
+      .from('playlist_video')
+      .insert({ playlist_id: playlistId, video_id: data[0].id })
+
+    await supabase
+      .from('playlists')
+      .update({ video_count: selectedPlaylist.videos_count + 1 })
+      .eq('id', playlistId)
 
     toggleModal()
   }
@@ -125,8 +155,8 @@ export const ModalAddToPlaylist = ({
     >
       <Title>Select one of your playlists</Title>
       <Form onSubmit={submit}>
-        <Label htmlFor="name">Name</Label>
-        <Select onChange={changeOption} id="name">
+        <Label htmlFor="playlist">Playlist</Label>
+        <Select onChange={changeOption} id="playlist">
           <option value={''}>Select a playlist...</option>
           {playlists.map((playlist) => (
             <option key={playlist.id} value={playlist.id}>
