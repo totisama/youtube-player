@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { supabase } from '../utils/supabase'
 import { Playlist } from '../types'
 import { Link } from 'react-router-dom'
+// import { ModalConfirm } from './ModalConfirm'
 
 const Section = styled.section`
   width: 100%;
@@ -33,6 +34,7 @@ const PlaylistCard = styled(Link)`
 `
 
 const PlaylistTitle = styled.h2`
+  font-family: 'Roboto', sans-serif;
   font-size: 30px;
   font-weight: 600;
   text-align: center;
@@ -40,10 +42,26 @@ const PlaylistTitle = styled.h2`
   margin: 0;
 `
 
+const Hr = styled.hr`
+  width: 100%;
+  margin: 10px 0;
+`
+
+const InformationSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+`
+
 const PlaylistDescription = styled.p`
   font-size: 16px;
-  text-align: center;
-  margin: 10px 0;
+`
+
+const VideosCount = styled.span`
+  font-size: 16px;
+  font-weight: 600;
+  color: #ff7700;
 `
 
 const Buttons = styled.div`
@@ -112,16 +130,19 @@ export const PlaylistsList = () => {
       {playlists.map((playlist) => (
         <PlaylistCard to={`/playlists/${playlist.id}`} key={playlist.id}>
           <PlaylistTitle>{playlist.name}</PlaylistTitle>
-          <PlaylistDescription>{playlist.description}</PlaylistDescription>
+          <Hr />
+          <InformationSection>
+            <PlaylistDescription>{playlist.description}</PlaylistDescription>
+            <VideosCount>Videos: {playlist.videos_count}</VideosCount>
+          </InformationSection>
           <Buttons>
-            <Button>✍🏼 Edit</Button>
-            <Button
+            {/* <Button
               onClick={() => {
                 deletePlaylist(playlist.id)
               }}
             >
               🗑️ Delete
-            </Button>
+            </Button> */}
           </Buttons>
         </PlaylistCard>
       ))}
