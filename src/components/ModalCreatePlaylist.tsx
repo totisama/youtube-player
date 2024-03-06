@@ -1,14 +1,16 @@
 import styled from 'styled-components'
 import Modal from 'styled-react-modal'
 import { supabase } from '../utils/supabase'
+import { type NewPlaylist } from '../types'
 
 const StyledModal = Modal.styled`
   width: 20rem;
-  height: 20rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: #222222;
+  padding: 20px 0;
+  border-radius: 25px;
 `
 
 const Form = styled.form`
@@ -22,6 +24,7 @@ const Title = styled.h2`
   color: #ffffff;
   font-size: 30px;
   text-align: center;
+  margin: 5px 0;
 `
 
 const Label = styled.label`
@@ -55,6 +58,14 @@ const CreateButton = styled.button`
   }
 `
 
+const TextArea = styled.textarea`
+  width: 100%;
+  padding: 10px;
+  min-height: 100px;
+  border-radius: 5px;
+  border: 1px solid #ffffff;
+`
+
 export const ModalCreatePlaylist = ({
   isOpen,
   toggleModal,
@@ -64,17 +75,29 @@ export const ModalCreatePlaylist = ({
 }) => {
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const form = e.target as typeof e.currentTarget & {
+
+    const { name, description } = e.target as typeof e.currentTarget & {
       name: { value: string }
+      description: { value: string }
     }
 
-    const value = form.name.value
+    const nameValue = name.value
+    const desciptionValue = description.value
 
-    if (value === '') {
+    if (nameValue === '') {
       return
     }
 
-    await supabase.from('playlists').insert({ name: value })
+    const newPlaylist: NewPlaylist = {
+      name: nameValue,
+      videos_count: 0,
+    }
+
+    if (desciptionValue !== '') {
+      newPlaylist.description = desciptionValue
+    }
+
+    await supabase.from('playlists').insert(newPlaylist)
 
     toggleModal()
   }
@@ -89,6 +112,8 @@ export const ModalCreatePlaylist = ({
       <Form onSubmit={submit}>
         <Label htmlFor="name">Name</Label>
         <Input id="name" placeholder="name" />
+        <Label htmlFor="description">Description</Label>
+        <TextArea id="description" placeholder="Description" />
         <CreateButton type="submit">Create new</CreateButton>
       </Form>
     </StyledModal>
