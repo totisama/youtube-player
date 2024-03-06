@@ -64,7 +64,17 @@ export interface YouTubeVideoProps {
   fromStart?: boolean
 }
 
-export interface Playlist {
-  id: string
+export interface NewPlaylist {
   name: string
+  description?: string
+  videos_count: number
+}
+
+export interface Playlist extends NewPlaylist {
+  id: string
+}
+
+export interface VideoDB {
+  id: string
+  video_id: string
 }
