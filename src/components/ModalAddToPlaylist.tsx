@@ -104,10 +104,20 @@ export const ModalAddToPlaylist = ({
       return
     }
 
-    const { error, data } = await supabase
-      .from('video')
-      .insert({ video_id: videoId })
-      .select()
+    const video = await supabase.from('video').select().eq('video_id', videoId)
+    let data = video.data
+    let error = video.error
+
+    // If the video is not in the database, we add it
+    if (!video) {
+      const { error: reqError, data: reqData } = await supabase
+        .from('video')
+        .insert({ video_id: videoId })
+        .select()
+
+      data = reqData
+      error = reqError
+    }
 
     if (error || !data || data.length === 0) {
       setError('There was an error')
