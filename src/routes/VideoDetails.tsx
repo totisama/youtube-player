@@ -119,7 +119,11 @@ export const VideoDetails = () => {
         <Description>{video.description}</Description>
         {new Date(video.datePublished).toDateString()}
       </Information>
-      <ModalAddToPlaylist isOpen={isOpen} toggleModal={toggleModal} />
+      <ModalAddToPlaylist
+        isOpen={isOpen}
+        toggleModal={toggleModal}
+        videoId={id}
+      />
     </Page>
   )
 }
