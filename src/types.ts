@@ -60,11 +60,11 @@ export interface CurrentVideoProps {
 }
 
 export interface YouTubeVideoProps {
-  type: 'small' | 'big'
   videoId: string
   width: number
   height: number
   fromStart?: boolean
+  type?: 'small' | 'big'
 }
 
 export interface NewPlaylist {
