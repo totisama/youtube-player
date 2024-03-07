@@ -122,7 +122,7 @@ export const VideoDetails = () => {
       <ModalAddToPlaylist
         isOpen={isOpen}
         toggleModal={toggleModal}
-        videoId={id}
+        video={video}
       />
     </Page>
   )
