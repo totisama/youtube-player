@@ -216,7 +216,7 @@ export const PlaylistVideos = () => {
       <Videos>
         {videos?.map((video) => (
           <VideoCard key={video.id}>
-            <Video to={`/detail/${video.video.video_id}`}>
+            <Video to={`/detail/${video.video.video_id}?playlistId=${id}`}>
               <Image src={video.video.thumbnail_url} alt={video.video.title} />
               <VideoTitle>{video.video.title}</VideoTitle>
             </Video>

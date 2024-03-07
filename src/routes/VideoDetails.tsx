@@ -1,11 +1,12 @@
 import styled from 'styled-components'
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import { fetcher, formatViews } from '../utils'
 import useSWR from 'swr'
 import { Video } from '../types'
 import { YoutubeVideo } from '../components/YoutubeVideo'
 import { ModalAddToPlaylist } from '../components/ModalAddToPlaylist'
 import { useState } from 'react'
+import { PlaylistVideosSmall } from '../components/PlaylistVideosSmall'
 
 const Page = styled.main`
   margin-top: 25px;
@@ -91,6 +92,8 @@ export const VideoDetails = () => {
     `https://youtube.thorsteinsson.is/api/videos/${id}`,
     fetcher,
   )
+  const [searchParams] = useSearchParams()
+  const playlistId = searchParams.get('playlistId') || ''
 
   function toggleModal() {
     setIsOpen(!isOpen)
@@ -121,6 +124,7 @@ export const VideoDetails = () => {
         <Description>{video.description}</Description>
         {new Date(video.datePublished).toDateString()}
       </Information>
+      <PlaylistVideosSmall playlistId={Number(playlistId)} />
       <ModalAddToPlaylist
         isOpen={isOpen}
         toggleModal={toggleModal}
