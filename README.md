@@ -2,6 +2,18 @@
 
 This project was developed for the React Web class in the Harbour.Space Master's Front-End Development program. It showcases functionality for searching and watching YouTube videos. Additionally, users have the ability to create playlists, which are stored in a database, and effortlessly add videos to them.
 
+#### 🧪 [Try it here](https://youtube-player-drid.vercel.app)
+
+## 🌟 Features
+
+- Browse and view YouTube videos
+- Search for videos while watching a video
+- Create and delete playlists
+- Manage playlists by adding or removing videos as needed.
+- Play the videos from a playlist
+- Automatically transition to the next video in the playlist upon completion
+- Responsive design
+
 ## 🧱 Getting Started
 
 Clone the repo and enter the folder
@@ -40,8 +52,6 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to see the r
 - Styled Components
 - Framer Motion
 - Supabase
-
-### 🧪 [Try it here](https://youtube-player-drid.vercel.app)
 
 ## 🪪 License
 
