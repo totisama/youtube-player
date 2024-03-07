@@ -1,6 +1,6 @@
 # Youtube Video Player 🎥
 
-This project was developed for the reactReact Web class in the Harbour.Space Master's Front-End Development program. It features Youtube video searching and watching.
+This project was developed for the React Web class in the Harbour.Space Master's Front-End Development program. It showcases functionality for searching and watching YouTube videos. Additionally, users have the ability to create playlists, which are stored in a database, and effortlessly add videos to them.
 
 ## 🧱 Getting Started
 
