@@ -47,6 +47,7 @@ export const YoutubeVideo = ({
       onPlay={onPlay}
       onPause={onPause}
       onEnd={onEnd}
+      iframeClassName={'youtube-iframe'}
     />
   )
 }
