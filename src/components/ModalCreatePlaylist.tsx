@@ -42,7 +42,6 @@ const Input = styled.input`
 `
 
 const CreateButton = styled.button`
-  outline: 0;
   height: 40px;
   border: 0;
   font-size: 14px;

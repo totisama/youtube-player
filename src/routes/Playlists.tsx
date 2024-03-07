@@ -33,7 +33,6 @@ const Title = styled.h1`
 
 const AddNewButton = styled.button`
   background: #ff7700;
-  outline: 0;
   width: 50px;
   height: 40px;
   border: 0;

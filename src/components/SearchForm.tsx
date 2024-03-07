@@ -19,7 +19,6 @@ const FormContainer = styled.div`
 `
 
 const ButtonForm = styled.button`
-  outline: 0;
   min-width: 100px;
   width: 10%;
   height: 40px;

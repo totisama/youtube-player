@@ -60,7 +60,6 @@ const Description = styled.p`
 const AddToPlaylist = styled.button`
   display: block;
   background: #ff000091;
-  outline: 0;
   height: 30px;
   border: 0;
   font-size: 14px;
