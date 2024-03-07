@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import Modal from 'styled-react-modal'
 import { supabase } from '../utils/supabase'
 import { useEffect, useState } from 'react'
-import { Playlist, VideoDB } from '../types'
+import { Playlist, Video } from '../types'
 
 const StyledModal = Modal.styled`
   width: 20rem;
@@ -71,14 +71,55 @@ const Error = styled.strong`
 export const ModalAddToPlaylist = ({
   isOpen,
   toggleModal,
-  videoId,
+  video,
 }: {
   isOpen: boolean
   toggleModal: () => void
-  videoId: string
+  video: Video
 }) => {
   const [playlists, setPlaylists] = useState<Playlist[]>([])
   const [error, setError] = useState<string | null>(null)
+
+  const getExistingVideo = async () => {
+    const dbVideo = await supabase
+      .from('video')
+      .select()
+      .eq('video_id', video.videoId)
+
+    return dbVideo
+  }
+
+  const createNewVideo = async () => {
+    const { error: reqError, data: reqData } = await supabase
+      .from('video')
+      .insert({
+        video_id: video.videoId,
+        title: video.title,
+        thumbnail_url: video.thumbnailUrl,
+      })
+      .select()
+
+    return { reqError, reqData }
+  }
+
+  const createVideoPlaylist = async ({
+    playlistId,
+    dataId,
+    videosCount,
+  }: {
+    playlistId: string
+    dataId: string
+    videosCount: number
+  }) => {
+    await supabase
+      .from('playlist_video')
+      .insert({ playlist_id: playlistId, video_id: dataId })
+
+    await supabase
+      .from('playlists')
+      .update({ videos_count: videosCount + 1 })
+      .eq('id', playlistId)
+  }
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -93,9 +134,6 @@ export const ModalAddToPlaylist = ({
       return
     }
 
-    console.log(playlists)
-    console.log(playlistId)
-
     const selectedPlaylist = playlists.find(
       (playlist) => String(playlist.id) === String(playlistId),
     )
@@ -104,17 +142,13 @@ export const ModalAddToPlaylist = ({
       return
     }
 
-    const video = await supabase.from('video').select().eq('video_id', videoId)
-    let data = video.data
-    let error = video.error
+    const existingVideo = await getExistingVideo()
+    let data = existingVideo.data
+    let error = existingVideo.error
 
-    // If the video is not in the database, we add it
-    if (!video) {
-      const { error: reqError, data: reqData } = await supabase
-        .from('video')
-        .insert({ video_id: videoId })
-        .select()
-
+    // If the video is not in the database, we create it
+    if (!data || data.length === 0) {
+      const { reqData, reqError } = await createNewVideo()
       data = reqData
       error = reqError
     }
@@ -124,14 +158,11 @@ export const ModalAddToPlaylist = ({
       return
     }
 
-    await supabase
-      .from('playlist_video')
-      .insert({ playlist_id: playlistId, video_id: data[0].id })
-
-    await supabase
-      .from('playlists')
-      .update({ video_count: selectedPlaylist.videos_count + 1 })
-      .eq('id', playlistId)
+    await createVideoPlaylist({
+      playlistId,
+      dataId: data[0].id,
+      videosCount: selectedPlaylist.videos_count,
+    })
 
     toggleModal()
   }
