@@ -149,9 +149,7 @@ export const PlaylistVideos = () => {
       .update({ videos_count: playlists[0].videos_count - 1 })
       .eq('id', playlistId)
 
-    console.log(videos)
     const newVideos = videos.filter((video) => video.id !== videoId)
-    console.log(newVideos)
 
     setVideos(newVideos)
   }
