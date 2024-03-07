@@ -1,4 +1,6 @@
-export const fetcher = (...args) => fetch(...args).then((res) => res.json())
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const fetcher = (...args: [RequestInfo, RequestInit?]): Promise<any> =>
+  fetch(...args).then((res: Response) => res.json())
 
 export const formatViews = (views: string) => {
   const viewsNumber = parseInt(views)

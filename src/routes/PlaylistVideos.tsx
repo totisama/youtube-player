@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { supabase } from '../utils/supabase'
-import { Playlist, PlaylistVideo } from '../types'
+import { Playlist, PlaylistVideo, VideoDB } from '../types'
 
 const Main = styled.main`
   display: flex;
@@ -170,7 +170,14 @@ export const PlaylistVideos = () => {
         return
       }
 
-      const dbVideos = response.data.map((video: PlaylistVideo) => {
+      const videosTyped = response.data as unknown as {
+        id: string
+        playlist_id: string
+        video_id: string
+        video: VideoDB
+      }[]
+
+      const dbVideos = videosTyped.map((video) => {
         return {
           id: video.id,
           playlist_id: video.playlist_id,
