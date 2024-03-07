@@ -129,7 +129,7 @@ export const PlaylistVideos = () => {
       .eq('id', videoId)
 
     if (error) {
-      // setError('There was a problem deleting the playlist')
+      setError('There was a problem deleting the playlist')
       return
     }
 

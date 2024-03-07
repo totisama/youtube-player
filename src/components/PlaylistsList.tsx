@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { supabase } from '../utils/supabase'
 import { Playlist } from '../types'
 import { Link } from 'react-router-dom'
-// import { ModalConfirm } from './ModalConfirm'
 
 const Section = styled.section`
   width: 100%;

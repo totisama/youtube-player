@@ -90,10 +90,7 @@ export const VideosList = ({ searchParam = '' }: { searchParam: string }) => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <Video
-            // video.id.videoId doesnt work
-            to={`/detail/${video.snippet.thumbnails.id}`}
-          >
+          <Video to={`/detail/${video.snippet.thumbnails.id}`}>
             <Image src={video.snippet.thumbnails.url} alt={video.title} />
             <InfoSection>
               <VideoTitle>{video.title}</VideoTitle>
