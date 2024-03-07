@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { PlaylistsList } from '../components/PlaylistsList'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { ModalCreatePlaylist } from '../components/ModalCreatePlaylist'
 
 const Main = styled.main`
@@ -51,6 +51,7 @@ const AddNewButton = styled.button`
 
 export const Playlists = () => {
   const [isOpen, setIsOpen] = useState(false)
+  const number = useRef(0)
 
   function toggleModal() {
     setIsOpen(!isOpen)
@@ -62,8 +63,12 @@ export const Playlists = () => {
         <Title>Playlists</Title>
         <AddNewButton onClick={toggleModal}>+</AddNewButton>
       </TitleSection>
-      <PlaylistsList />
-      <ModalCreatePlaylist isOpen={isOpen} toggleModal={toggleModal} />
+      <PlaylistsList key={number.current} />
+      <ModalCreatePlaylist
+        isOpen={isOpen}
+        toggleModal={toggleModal}
+        number={number}
+      />
     </Main>
   )
 }

@@ -69,9 +69,11 @@ const TextArea = styled.textarea`
 export const ModalCreatePlaylist = ({
   isOpen,
   toggleModal,
+  number,
 }: {
   isOpen: boolean
   toggleModal: () => void
+  number: React.MutableRefObject<number>
 }) => {
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -99,6 +101,7 @@ export const ModalCreatePlaylist = ({
 
     await supabase.from('playlists').insert(newPlaylist)
 
+    number.current = number.current + 1
     toggleModal()
   }
 
