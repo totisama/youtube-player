@@ -77,10 +77,13 @@ export interface Playlist extends NewPlaylist {
 export interface VideoDB {
   id: string
   video_id: string
+  title: string
+  thumbnail_url: string
 }
 
 export interface PlaylistVideo {
   id: string
   playlist_id: string
   video_id: string
+  video: VideoDB
 }
