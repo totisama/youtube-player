@@ -5,7 +5,7 @@ import useSWR from 'swr'
 import { Video } from '../types'
 import { YoutubeVideo } from '../components/YoutubeVideo'
 import { ModalAddToPlaylist } from '../components/ModalAddToPlaylist'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { PlaylistVideosSmall } from '../components/PlaylistVideosSmall'
 
 const Page = styled.main`
@@ -33,7 +33,7 @@ const Title = styled.h1`
   margin: 0px;
 `
 
-const Views = styled.span`
+const Extra = styled.span`
   font-size: 18px;
   color: #dedede;
   margin-bottom: 3px;
@@ -95,9 +95,11 @@ export const VideoDetails = () => {
   const [searchParams] = useSearchParams()
   const playlistId = searchParams.get('playlistId') || ''
 
-  function toggleModal() {
+  const toggleModal = () => {
     setIsOpen(!isOpen)
   }
+
+  useEffect(() => {}, [])
 
   if (isLoading) return <div>Loading...</div>
   if (error || video === undefined || id === undefined)
@@ -116,15 +118,17 @@ export const VideoDetails = () => {
         <Header>
           <TitleInfo>
             <Title>{video.title}</Title>
-            <Views>{formatViews(String(video.views))} views</Views>
           </TitleInfo>
           <AddToPlaylist onClick={toggleModal}>Add to playlist!</AddToPlaylist>
         </Header>
         <ChannelName>{video.owner}</ChannelName>
         <Description>{video.description}</Description>
-        {new Date(video.datePublished).toDateString()}
+        <Extra>
+          {formatViews(String(video.views))} views -{' '}
+          {new Date(video.datePublished).toDateString()}
+        </Extra>
       </Information>
-      <PlaylistVideosSmall playlistId={Number(playlistId)} />
+      {playlistId && <PlaylistVideosSmall playlistId={Number(playlistId)} />}
       <ModalAddToPlaylist
         isOpen={isOpen}
         toggleModal={toggleModal}

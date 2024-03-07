@@ -9,7 +9,7 @@ export const YoutubeVideo = ({
   height,
   fromStart = false,
 }: YouTubeVideoProps) => {
-  const { currentSeconds, setCurrentSeconds } = useContext(
+  const { currentSeconds, setCurrentSeconds, setHasFinished } = useContext(
     CurrentVideoContext,
   ) as CurrentVideoContextType
   const starSeconds = useRef(fromStart ? 0 : currentSeconds)
@@ -35,6 +35,10 @@ export const YoutubeVideo = ({
     intervalId = null
   }
 
+  const onEnd: YouTubeProps['onEnd'] = () => {
+    setHasFinished(true)
+  }
+
   return (
     <YouTube
       key={videoId}
@@ -42,6 +46,7 @@ export const YoutubeVideo = ({
       opts={opts}
       onPlay={onPlay}
       onPause={onPause}
+      onEnd={onEnd}
     />
   )
 }

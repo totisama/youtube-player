@@ -51,6 +51,8 @@ export interface Video {
 export interface CurrentVideoContextType {
   currentSeconds: number
   setCurrentSeconds: (seconds: number) => void
+  hasFinished: boolean
+  setHasFinished: (hasFinished: boolean) => void
 }
 
 export interface CurrentVideoProps {
