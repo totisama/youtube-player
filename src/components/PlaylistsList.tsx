@@ -15,6 +15,12 @@ const Section = styled.section`
   margin-top: 50px;
 `
 
+const Playlist = styled.article`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
 const PlaylistCard = styled(Link)`
   background: #222222;
   width: 300px;
@@ -62,13 +68,6 @@ const VideosCount = styled.span`
   font-size: 16px;
   font-weight: 600;
   color: #ff7700;
-`
-
-const Buttons = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 20px;
 `
 
 const Button = styled.button`
@@ -128,23 +127,23 @@ export const PlaylistsList = () => {
   return (
     <Section>
       {playlists.map((playlist) => (
-        <PlaylistCard to={`/playlists/${playlist.id}`} key={playlist.id}>
-          <PlaylistTitle>{playlist.name}</PlaylistTitle>
-          <Hr />
-          <InformationSection>
-            <PlaylistDescription>{playlist.description}</PlaylistDescription>
-            <VideosCount>Videos: {playlist.videos_count}</VideosCount>
-          </InformationSection>
-          <Buttons>
-            {/* <Button
-              onClick={() => {
-                deletePlaylist(playlist.id)
-              }}
-            >
-              🗑️ Delete
-            </Button> */}
-          </Buttons>
-        </PlaylistCard>
+        <Playlist key={playlist.id}>
+          <PlaylistCard to={`/playlists/${playlist.id}`}>
+            <PlaylistTitle>{playlist.name}</PlaylistTitle>
+            <Hr />
+            <InformationSection>
+              <PlaylistDescription>{playlist.description}</PlaylistDescription>
+              <VideosCount>Videos: {playlist.videos_count}</VideosCount>
+            </InformationSection>
+          </PlaylistCard>
+          <Button
+            onClick={() => {
+              deletePlaylist(playlist.id)
+            }}
+          >
+            🗑️ Delete
+          </Button>
+        </Playlist>
       ))}
       {error && <Error>{error}</Error>}
     </Section>
