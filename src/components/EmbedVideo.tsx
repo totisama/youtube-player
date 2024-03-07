@@ -67,7 +67,9 @@ export const EmbedVideo = ({ videoId }: { videoId: string }) => {
           {showVideo ? 'X' : '✚'}
         </motion.div>
       </HideButton>
-      {showVideo && <YoutubeVideo videoId={videoId} width={400} height={225} />}
+      {showVideo && (
+        <YoutubeVideo type="small" videoId={videoId} width={400} height={225} />
+      )}
     </IFrameDiv>
   )
 }

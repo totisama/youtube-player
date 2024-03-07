@@ -4,6 +4,7 @@ import { useContext, useRef } from 'react'
 import { CurrentVideoContext } from '../context/CurrentVideo'
 
 export const YoutubeVideo = ({
+  type = 'big',
   videoId,
   width,
   height,
@@ -47,7 +48,7 @@ export const YoutubeVideo = ({
       onPlay={onPlay}
       onPause={onPause}
       onEnd={onEnd}
-      iframeClassName={'youtube-iframe'}
+      iframeClassName={type === 'big' ? 'youtube-iframe' : ''}
     />
   )
 }
