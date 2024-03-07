@@ -24,6 +24,7 @@ const TitleInfo = styled.div`
   display: flex;
   align-items: end;
   gap: 10px;
+  max-width: 80%;
 `
 
 const Title = styled.h1`
@@ -35,6 +36,7 @@ const Views = styled.span`
   font-size: 18px;
   color: #dedede;
   margin-bottom: 3px;
+  width: 20%;
 `
 
 const Information = styled.section`
