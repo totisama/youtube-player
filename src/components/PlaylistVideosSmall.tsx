@@ -12,7 +12,7 @@ interface StyledVideoProps {
 const PlaylistVideos = styled.div`
   margin-top: 25px;
   width: 50%;
-  height: 500px;
+  max-height: 500px;
   background-color: #1c1c1c;
   padding: 10px 15px 20px 15px;
   scrollbar-width: thin;

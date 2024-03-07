@@ -44,7 +44,7 @@ const Information = styled.section`
   background-color: #1c1c1c;
   padding: 10px 15px 20px 15px;
   margin-top: 10px;
-  width: 80%;
+  width: 100%;
 `
 
 const ChannelName = styled.h2`
@@ -58,9 +58,8 @@ const Description = styled.p`
 `
 
 const AddToPlaylist = styled.button`
-  display: block;
   background: #ff000091;
-  height: 30px;
+  max-height: 50px;
   border: 0;
   font-size: 14px;
   transition: all 0.3s ease;
