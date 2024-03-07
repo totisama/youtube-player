@@ -10,7 +10,7 @@ interface IFrameDivProps {
   showvideo: boolean
 }
 
-interface RemoveButton {
+interface HideButton {
   showvideo: boolean
 }
 
@@ -23,7 +23,7 @@ const IFrameDiv = styled(motion.div)<IFrameDivProps>`
   height: ${(props) => (props.showvideo ? '225px;' : '50px;')};
 `
 
-const RemoveButton = styled.button<RemoveButton>`
+const HideButton = styled.button<HideButton>`
   position: absolute;
   color: #fff;
   border: 0;
@@ -56,7 +56,7 @@ export const EmbedVideo = ({ videoId }: { videoId: string }) => {
       animate={{ height: showVideo ? 225 : 50, width: showVideo ? 400 : 50 }}
       transition={{ duration: 0.5 }}
     >
-      <RemoveButton
+      <HideButton
         showvideo={showVideo}
         onClick={() => setShowVideo(!showVideo)}
       >
@@ -66,8 +66,10 @@ export const EmbedVideo = ({ videoId }: { videoId: string }) => {
         >
           {showVideo ? 'X' : '✚'}
         </motion.div>
-      </RemoveButton>
-      {showVideo && <YoutubeVideo videoId={videoId} width={400} height={225} />}
+      </HideButton>
+      {showVideo && (
+        <YoutubeVideo type="small" videoId={videoId} width={400} height={225} />
+      )}
     </IFrameDiv>
   )
 }

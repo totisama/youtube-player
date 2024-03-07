@@ -51,6 +51,8 @@ export interface Video {
 export interface CurrentVideoContextType {
   currentSeconds: number
   setCurrentSeconds: (seconds: number) => void
+  hasFinished: boolean
+  setHasFinished: (hasFinished: boolean) => void
 }
 
 export interface CurrentVideoProps {
@@ -62,4 +64,29 @@ export interface YouTubeVideoProps {
   width: number
   height: number
   fromStart?: boolean
+  type?: 'small' | 'big'
+}
+
+export interface NewPlaylist {
+  name: string
+  description?: string
+  videos_count: number
+}
+
+export interface Playlist extends NewPlaylist {
+  id: string
+}
+
+export interface VideoDB {
+  id: string
+  video_id: string
+  title: string
+  thumbnail_url: string
+}
+
+export interface PlaylistVideo {
+  id: string
+  playlist_id: string
+  video_id: string
+  video: VideoDB
 }

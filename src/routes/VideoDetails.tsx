@@ -1,9 +1,12 @@
 import styled from 'styled-components'
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import { fetcher, formatViews } from '../utils'
 import useSWR from 'swr'
 import { Video } from '../types'
 import { YoutubeVideo } from '../components/YoutubeVideo'
+import { ModalAddToPlaylist } from '../components/ModalAddToPlaylist'
+import { useEffect, useState } from 'react'
+import { PlaylistVideosSmall } from '../components/PlaylistVideosSmall'
 
 const Page = styled.main`
   margin-top: 25px;
@@ -12,11 +15,17 @@ const Page = styled.main`
   padding-bottom: 100px;
 `
 
+const Header = styled.header`
+  display: flex;
+  justify-content: space-between;
+`
+
 const TitleInfo = styled.div`
+  font-family: 'Roboto', sans-serif;
   display: flex;
   align-items: end;
-  margin: 10px 0;
   gap: 10px;
+  max-width: 80%;
 `
 
 const Title = styled.h1`
@@ -24,11 +33,18 @@ const Title = styled.h1`
   margin: 0px;
 `
 
+const Extra = styled.span`
+  font-size: 18px;
+  color: #dedede;
+  margin-bottom: 3px;
+  width: 20%;
+`
+
 const Information = styled.section`
   background-color: #1c1c1c;
-  padding: 5px 0 20px 15px;
+  padding: 10px 15px 20px 15px;
   margin-top: 10px;
-  width: 80%;
+  width: 100%;
 `
 
 const ChannelName = styled.h2`
@@ -41,6 +57,23 @@ const Description = styled.p`
   font-size: 18px;
 `
 
+const AddToPlaylist = styled.button`
+  background: #ff000091;
+  max-height: 50px;
+  border: 0;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 16px;
+  color: white;
+
+  &:hover {
+    scale: 1.05;
+  }
+`
+
 const Error = styled.strong`
   padding: 50px;
   font-size: 32px;
@@ -48,6 +81,7 @@ const Error = styled.strong`
 
 export const VideoDetails = () => {
   const { id } = useParams()
+  const [isOpen, setIsOpen] = useState(false)
   const {
     data: video,
     error,
@@ -56,6 +90,14 @@ export const VideoDetails = () => {
     `https://youtube.thorsteinsson.is/api/videos/${id}`,
     fetcher,
   )
+  const [searchParams] = useSearchParams()
+  const playlistId = searchParams.get('playlistId') || ''
+
+  const toggleModal = () => {
+    setIsOpen(!isOpen)
+  }
+
+  useEffect(() => {}, [])
 
   if (isLoading) return <div>Loading...</div>
   if (error || video === undefined || id === undefined)
@@ -71,14 +113,25 @@ export const VideoDetails = () => {
         fromStart={true}
       />
       <Information>
-        <TitleInfo>
-          <Title>{video.title}</Title>
-          {formatViews(String(video.views))} views
-        </TitleInfo>
+        <Header>
+          <TitleInfo>
+            <Title>{video.title}</Title>
+          </TitleInfo>
+          <AddToPlaylist onClick={toggleModal}>Add to playlist!</AddToPlaylist>
+        </Header>
         <ChannelName>{video.owner}</ChannelName>
         <Description>{video.description}</Description>
-        {new Date(video.datePublished).toDateString()}
+        <Extra>
+          {formatViews(String(video.views))} views -{' '}
+          {new Date(video.datePublished).toDateString()}
+        </Extra>
       </Information>
+      {playlistId && <PlaylistVideosSmall playlistId={Number(playlistId)} />}
+      <ModalAddToPlaylist
+        isOpen={isOpen}
+        toggleModal={toggleModal}
+        video={video}
+      />
     </Page>
   )
 }

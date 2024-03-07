@@ -2,28 +2,35 @@ import styled from 'styled-components'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 
 const Form = styled.form`
-  background: #222222;
   width: 50%;
   display: flex;
   margin: 0 auto;
-  padding: 35px;
+  padding: 35px 0px;
   border-radius: 10px;
-  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  margin: 0px;
+`
+
+const FormContainer = styled.div`
+  width: 100%;
+  display: flex;
+  position: relative;
 `
 
 const ButtonForm = styled.button`
-  outline: 0;
   min-width: 100px;
-  width: 20%;
-  height: 50px;
+  width: 10%;
+  height: 40px;
   border: 0;
   color: #000000;
-  font-size: 14px;
   transition: all 0.3s ease;
   cursor: pointer;
   border-radius: 5px;
   text-align: center;
   font-size: 16px;
+  position: absolute;
+  right: 0;
 
   &:hover {
     background: #cacfd7;
@@ -33,7 +40,7 @@ const ButtonForm = styled.button`
 const Input = styled.input`
   min-width: 200px;
   width: 100%;
-  height: 50px;
+  height: 40px;
   border-radius: 5px;
   border: 0;
   padding: 15px;
@@ -74,16 +81,16 @@ export const SearchForm = () => {
   }
 
   return (
-    <section>
-      <Form onSubmit={submit}>
+    <Form onSubmit={submit}>
+      <FormContainer>
         <Input
           type="text"
           name="name"
           placeholder="Search"
           defaultValue={search}
         />
-        <ButtonForm>Search videos</ButtonForm>
-      </Form>
-    </section>
+        <ButtonForm>Search</ButtonForm>
+      </FormContainer>
+    </Form>
   )
 }
