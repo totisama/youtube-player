@@ -67,6 +67,11 @@ const Error = styled.strong`
   color: red;
 `
 
+const Success = styled.strong`
+  font-size: 16px;
+  color: green;
+`
+
 export const ModalAddToPlaylist = ({
   isOpen,
   toggleModal,
@@ -78,6 +83,7 @@ export const ModalAddToPlaylist = ({
 }) => {
   const [playlists, setPlaylists] = useState<Playlist[]>([])
   const [error, setError] = useState<string | null>(null)
+  const [success, setSucces] = useState<string | null>(null)
 
   const getExistingVideo = async () => {
     const dbVideo = await supabase
@@ -179,7 +185,13 @@ export const ModalAddToPlaylist = ({
       videosCount: selectedPlaylist.videos_count,
     })
 
-    toggleModal()
+    setSucces('Video added to playlist')
+
+    setTimeout(() => {
+      setSucces('')
+      setError('')
+      toggleModal()
+    }, 2000)
   }
 
   const changeOption = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -221,6 +233,7 @@ export const ModalAddToPlaylist = ({
           ))}
         </Select>
         <Error>{error}</Error>
+        <Success>{success}</Success>
         <CreateButton type="submit">Add</CreateButton>
       </Form>
     </StyledModal>
