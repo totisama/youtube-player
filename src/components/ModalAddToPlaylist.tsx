@@ -149,8 +149,24 @@ export const ModalAddToPlaylist = ({
     // If the video is not in the database, we create it
     if (!data || data.length === 0) {
       const { reqData, reqError } = await createNewVideo()
+
       data = reqData
       error = reqError
+    } else {
+      const playlistVideo = await supabase
+        .from('playlist_video')
+        .select()
+        .eq('playlist_id', playlistId)
+        .eq('video_id', data[0].id)
+
+      if (
+        playlistVideo &&
+        playlistVideo.data &&
+        playlistVideo.data.length > 0
+      ) {
+        setError('This video is already in this playlist')
+        return
+      }
     }
 
     if (error || !data || data.length === 0) {
