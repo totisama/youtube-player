@@ -17,7 +17,7 @@ export function VideoCard({ video }: VideoCardProps) {
     <Card as={motion.div} variants={itemVariants}>
       <Thumbnail src={video.snippet.thumbnails.url} alt={video.title} />
       <Title>{video.title}</Title>
-      <StyledLink to={`/video/${video.id}`}>View Details</StyledLink>
+      <StyledLink to={`/video/${video.id.videoId}`}>View Details</StyledLink>
     </Card>
   )
 }

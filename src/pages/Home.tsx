@@ -20,7 +20,7 @@ const listVariants = {
 
 export function Home() {
   const { search } = useContext(SearchContext) as SearchContextType
-  const { data, error, isLoading } = useSWR<Video[], boolean>(
+  const { data, error, isLoading } = useSWR<Video[]>(
     `${SEARCH_URL}?q=${search}`,
     fetcher
   )
