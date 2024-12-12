@@ -30,6 +30,6 @@ export interface Thumbnails {
 }
 
 export interface SearchContextType {
-  search: string | null
+  search: string
   setSearch: (seconds: string) => void
 }

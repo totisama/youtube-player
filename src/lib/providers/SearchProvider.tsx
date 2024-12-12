@@ -6,9 +6,11 @@ interface SearchProps {
 }
 
 export const SearchProvider = ({ children }: SearchProps) => {
-  const [search, setSearch] = useState<string | null>('Amazing videos')
+  const [search, setSearch] = useState<string>('Amazing videos')
 
   const setSearchValue = (value: string) => {
+    if (!value) return
+
     setSearch(value)
   }
 
