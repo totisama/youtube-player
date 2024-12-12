@@ -6,6 +6,17 @@ import { fetcher } from '../utils/fetcher'
 import { SEARCH_URL } from '../constants'
 import { useContext } from 'react'
 import { SearchContext } from '../lib/contexts/SearchContext'
+import { motion } from 'framer-motion'
+
+const listVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+}
 
 export function Home() {
   const { search } = useContext(SearchContext) as SearchContextType
@@ -14,15 +25,29 @@ export function Home() {
     fetcher
   )
 
-  if (isLoading || !data || error) return <div>Loading...</div>
+  if (error) {
+    return (
+      <HomeContainer>{error && <div>There was an error</div>}</HomeContainer>
+    )
+  }
 
   return (
     <HomeContainer>
-      <VideoList>
-        {data.map((video) => (
-          <VideoCard key={video.id.videoId} video={video} />
-        ))}
-      </VideoList>
+      {isLoading || error ? (
+        <div>Loading...</div>
+      ) : (
+        <VideoList
+          as={motion.div}
+          variants={listVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {data &&
+            data.map((video) => (
+              <VideoCard key={video.id.videoId} video={video} />
+            ))}
+        </VideoList>
+      )}
     </HomeContainer>
   )
 }

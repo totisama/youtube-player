@@ -1,14 +1,20 @@
 import styled from 'styled-components'
 import { Link } from 'react-router'
 import { Video } from '../types/types'
+import { motion } from 'framer-motion'
 
 interface VideoCardProps {
   video: Video
 }
 
+const itemVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
+}
+
 export function VideoCard({ video }: VideoCardProps) {
   return (
-    <Card>
+    <Card as={motion.div} variants={itemVariants}>
       <Thumbnail src={video.snippet.thumbnails.url} alt={video.title} />
       <Title>{video.title}</Title>
       <StyledLink to={`/video/${video.id}`}>View Details</StyledLink>

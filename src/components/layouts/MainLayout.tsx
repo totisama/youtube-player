@@ -6,7 +6,7 @@ export function MainLayout() {
   return (
     <LayoutContainer>
       <Header>
-        <h1>YouTube Video Finder</h1>
+        <h1>YouTube Player</h1>
         <SearchInput />
       </Header>
       <MainContent>
