@@ -9,7 +9,7 @@ interface SearchFormData {
 }
 
 export function SearchInput() {
-  const { search, setSearch } = useContext(SearchContext) as SearchContextType
+  const { setSearch } = useContext(SearchContext) as SearchContextType
   const { register, handleSubmit } = useForm<SearchFormData>()
 
   const onSubmit = (data: SearchFormData) => {
@@ -19,7 +19,6 @@ export function SearchInput() {
   return (
     <InputContainer onSubmit={handleSubmit(onSubmit)}>
       <Input
-        defaultValue={search}
         type="text"
         placeholder="Search videos..."
         {...register('search', {
