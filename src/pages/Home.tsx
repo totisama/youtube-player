@@ -27,7 +27,9 @@ export function Home() {
 
   if (error) {
     return (
-      <HomeContainer>{error && <div>There was an error</div>}</HomeContainer>
+      <HomeContainer>
+        <div>There was an error</div>
+      </HomeContainer>
     )
   }
 
