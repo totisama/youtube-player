@@ -33,3 +33,18 @@ export interface SearchContextType {
   search: string
   setSearch: (seconds: string) => void
 }
+
+export interface IndependentVideo {
+  url: string
+  title: string
+  description: string
+  owner: string
+  thumbnailUrl: string
+  datePublished: Date
+  genre: string
+  isFamilyFriendly: boolean
+  duration: number
+  views: number
+  likeCount: number
+  dislikeCount: number
+}
