@@ -1,12 +1,14 @@
 import styled from 'styled-components'
-import { Outlet } from 'react-router'
+import { Link, Outlet } from 'react-router'
 import { SearchInput } from '../SearchInput'
 
 export function MainLayout() {
   return (
     <LayoutContainer>
       <Header>
-        <h1>YouTube Player</h1>
+        <Link to="/">
+          <h1>YouTube Player</h1>
+        </Link>
         <SearchInput />
       </Header>
       <MainContent>
@@ -21,7 +23,8 @@ const LayoutContainer = styled.div`
   flex-direction: column;
   min-height: 100vh;
   width: 100vw;
-  background-color: #d6d6d6;
+  background-color: #1e1e1e;
+  color: #ffffff;
 `
 
 const Header = styled.header`
