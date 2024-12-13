@@ -14,39 +14,39 @@ const itemVariants = {
 
 export function VideoCard({ video }: VideoCardProps) {
   return (
-    <Card as={motion.div} variants={itemVariants}>
+    <Card
+      as={motion(Link)}
+      to={`/video/${video.id.videoId}`}
+      variants={itemVariants}
+    >
       <Thumbnail src={video.snippet.thumbnails.url} alt={video.title} />
       <Title>{video.title}</Title>
-      <StyledLink to={`/video/${video.id.videoId}`}>View Details</StyledLink>
     </Card>
   )
 }
 
-const Card = styled.div`
+const Card = styled(Link)`
   padding: 10px;
   background: white;
   border: 1px solid #ddd;
   border-radius: 8px;
+  transition: all 0.3s ease-out;
+
+  &:hover {
+    scale: 1.05;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
 `
 
 const Thumbnail = styled.img`
   width: 100%;
   border-radius: 8px;
   margin-bottom: 10px;
+  aspect-ratio: 16/9;
 `
 
 const Title = styled.h3`
   color: #333;
   font-size: 16px;
   margin-bottom: 10px;
-`
-
-const StyledLink = styled(Link)`
-  color: #ff0000;
-  text-decoration: none;
-  font-weight: bold;
-
-  &:hover {
-    text-decoration: underline;
-  }
 `
