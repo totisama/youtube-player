@@ -3,9 +3,11 @@ import styled from 'styled-components'
 import useSWR from 'swr'
 import { VIDEO_URL } from '../constants'
 import { useParams } from 'react-router'
-import { IndependentVideo } from '../types/types'
+import { CurrentVideoType, IndependentVideo } from '../types/types'
 import { fetcher } from '../utils/fetcher'
 import { RelatedVideos } from '../components/RelatedVideos'
+import { useContext } from 'react'
+import { CurrentVideo } from '../lib/contexts/CurrentVideoContext'
 
 export const VideoDetails = () => {
   const { videoId } = useParams()
@@ -13,6 +15,13 @@ export const VideoDetails = () => {
     `${VIDEO_URL}/${videoId}`,
     fetcher
   )
+  const { setShouldDisplay, setUrl, setCurrentMinute } = useContext(
+    CurrentVideo
+  ) as CurrentVideoType
+
+  // const pauseVideo = () => {
+  //   setShouldDisplay(false)
+  // }
 
   if (isLoading) return <LoadingMessage>Loading...</LoadingMessage>
   if (error || !data)
@@ -28,8 +37,12 @@ export const VideoDetails = () => {
               controls={true}
               width="100%"
               height="100%"
-              onStart={() => console.log('onStart')}
-              onProgress={(data) => console.log('onProgress', data)}
+              onStart={() => {
+                setUrl(data.url)
+                setShouldDisplay(true)
+              }}
+              onProgress={(data) => setCurrentMinute(data.playedSeconds)}
+              // onPause={pauseVideo}
             />
           </PlayerContainer>
           <Title>{data.title}</Title>

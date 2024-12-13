@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { Link, Outlet } from 'react-router'
 import { SearchInput } from '../SearchInput'
+import { FloatingPlayer } from '../FloatingPlayer'
 
 export function MainLayout() {
   return (
@@ -14,6 +15,7 @@ export function MainLayout() {
       <MainContent>
         <Outlet />
       </MainContent>
+      <FloatingPlayer></FloatingPlayer>
     </LayoutContainer>
   )
 }
