@@ -6,9 +6,9 @@ interface SearchProps {
 }
 
 export const CurrentVideoProvider = ({ children }: SearchProps) => {
-  const [currentMinute, setCurrentMinute] = useState<string>('')
+  const [currentMinute, setCurrentMinute] = useState<number>(0)
   const [url, setUrl] = useState<string>('')
-  const [playing, setPlaying] = useState<boolean>(false)
+  const [isPlaying, setIsPlaying] = useState<boolean>(false)
 
   return (
     <CurrentVideo.Provider
@@ -17,8 +17,8 @@ export const CurrentVideoProvider = ({ children }: SearchProps) => {
         setUrl,
         currentMinute,
         setCurrentMinute,
-        playing,
-        setPlaying,
+        isPlaying,
+        setIsPlaying,
       }}
     >
       {children}

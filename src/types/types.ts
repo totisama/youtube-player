@@ -30,12 +30,12 @@ export interface Thumbnails {
 }
 
 export interface CurrentVideoType {
-  playing: boolean
-  setPlaying: (value: boolean) => void
+  isPlaying: boolean
+  setIsPlaying: (value: boolean) => void
   url: string
   setUrl: (value: string) => void
-  currentMinute: string
-  setCurrentMinute: (value: string) => void
+  currentMinute: number
+  setCurrentMinute: (value: number) => void
 }
 
 export interface IndependentVideo {
