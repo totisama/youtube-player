@@ -18,7 +18,7 @@ const listVariants = {
   },
 }
 
-export function Home() {
+export function VideoList() {
   const { search } = useContext(SearchContext) as SearchContextType
   const { data, error, isLoading } = useSWR<Video[]>(
     `${SEARCH_URL}?q=${search}`,
@@ -38,7 +38,7 @@ export function Home() {
       {isLoading || error ? (
         <div>Loading...</div>
       ) : (
-        <VideoList
+        <List
           as={motion.div}
           variants={listVariants}
           initial="hidden"
@@ -48,7 +48,7 @@ export function Home() {
             data.map((video) => (
               <VideoCard key={video.id.videoId} video={video} />
             ))}
-        </VideoList>
+        </List>
       )}
     </HomeContainer>
   )
@@ -60,7 +60,7 @@ const HomeContainer = styled.div`
   align-items: center;
 `
 
-const VideoList = styled.div`
+const List = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
