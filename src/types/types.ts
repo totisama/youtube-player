@@ -29,9 +29,13 @@ export interface Thumbnails {
   width: number
 }
 
-export interface SearchContextType {
-  search: string
-  setSearch: (seconds: string) => void
+export interface CurrentVideoType {
+  playing: boolean
+  setPlaying: (value: boolean) => void
+  url: string
+  setUrl: (value: string) => void
+  currentMinute: string
+  setCurrentMinute: (value: string) => void
 }
 
 export interface IndependentVideo {

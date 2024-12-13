@@ -1,12 +1,12 @@
 import { Routes, Route, BrowserRouter } from 'react-router'
 import { MainLayout } from './components/layouts/MainLayout'
 import { VideoList } from './pages/VideoList'
-import { SearchProvider } from './lib/providers/SearchProvider'
+import { CurrentVideoProvider } from './lib/providers/CurrentVideoProvider'
 import { VideoDetails } from './pages/VideoDetails'
 
 export default function App() {
   return (
-    <SearchProvider>
+    <CurrentVideoProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainLayout />}>
@@ -15,6 +15,6 @@ export default function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-    </SearchProvider>
+    </CurrentVideoProvider>
   )
 }
