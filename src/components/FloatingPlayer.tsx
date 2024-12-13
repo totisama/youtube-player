@@ -6,11 +6,12 @@ import styled from 'styled-components'
 import ReactPlayer from 'react-player'
 
 export const FloatingPlayer = () => {
-  const { shouldDisplay, setShouldDisplay, url } = useContext(
+  const { shouldDisplay, setShouldDisplay, url, currentMinute } = useContext(
     CurrentVideo
   ) as CurrentVideoType
   const location = useLocation()
   const isVideoListPage = location.pathname === '/'
+  const videoUrl = url + `&t=${currentMinute.toFixed(0)}`
 
   if (!isVideoListPage || !shouldDisplay) return null
 
@@ -19,7 +20,13 @@ export const FloatingPlayer = () => {
       <TopHeader>
         <CloseButton onClick={() => setShouldDisplay(false)}>X</CloseButton>
       </TopHeader>
-      <ReactPlayer url={url} controls={true} width="100%" height="100%" />
+      <ReactPlayer
+        playing={true}
+        url={videoUrl}
+        controls={true}
+        width="100%"
+        height="100%"
+      />
     </Container>
   )
 }
