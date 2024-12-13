@@ -24,7 +24,6 @@ const LayoutContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  width: 100vw;
   background-color: #1e1e1e;
   color: #ffffff;
 `
