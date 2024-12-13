@@ -15,7 +15,7 @@ const itemVariants = {
 export function VideoCard({ video }: VideoCardProps) {
   return (
     <Card
-      as={motion(Link)}
+      as={motion.create(Link)}
       to={`/video/${video.id.videoId}`}
       variants={itemVariants}
     >
