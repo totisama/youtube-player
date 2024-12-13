@@ -19,10 +19,6 @@ export const VideoDetails = () => {
     CurrentVideo
   ) as CurrentVideoType
 
-  // const pauseVideo = () => {
-  //   setShouldDisplay(false)
-  // }
-
   if (isLoading) return <LoadingMessage>Loading...</LoadingMessage>
   if (error || !data)
     return <ErrorMessage>Failed to load video details.</ErrorMessage>
@@ -42,7 +38,6 @@ export const VideoDetails = () => {
                 setShouldDisplay(true)
               }}
               onProgress={(data) => setCurrentMinute(data.playedSeconds)}
-              // onPause={pauseVideo}
             />
           </PlayerContainer>
           <Title>{data.title}</Title>
