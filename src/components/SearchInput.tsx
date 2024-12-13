@@ -1,19 +1,17 @@
 import styled from 'styled-components'
 import { useForm } from 'react-hook-form'
-import { SearchContext } from '../lib/contexts/SearchContext'
-import { SearchContextType } from '../types/types'
-import { useContext } from 'react'
+import { useSearchParams } from 'react-router'
 
 interface SearchFormData {
   search: string
 }
 
 export function SearchInput() {
-  const { setSearch } = useContext(SearchContext) as SearchContextType
+  const [, setSearchParams] = useSearchParams()
   const { register, handleSubmit } = useForm<SearchFormData>()
 
   const onSubmit = (data: SearchFormData) => {
-    setSearch(data.search)
+    setSearchParams(`search=${data.search}`)
   }
 
   return (

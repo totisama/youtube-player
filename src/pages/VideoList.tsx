@@ -1,12 +1,11 @@
 import styled from 'styled-components'
 import useSWR from 'swr'
-import { SearchContextType, Video } from '../types/types'
+import { Video } from '../types/types'
 import { VideoCard } from '../components/VideoCard'
 import { fetcher } from '../utils/fetcher'
 import { SEARCH_URL } from '../constants'
-import { useContext } from 'react'
-import { SearchContext } from '../lib/contexts/SearchContext'
 import { motion } from 'framer-motion'
+import { useSearchParams } from 'react-router'
 
 const listVariants = {
   hidden: { opacity: 0 },
@@ -18,10 +17,12 @@ const listVariants = {
   },
 }
 
+const DEFAULT_SEARCH = 'Amazing videos'
+
 export function VideoList() {
-  const { search } = useContext(SearchContext) as SearchContextType
+  const [search] = useSearchParams()
   const { data, error, isLoading } = useSWR<Video[]>(
-    `${SEARCH_URL}?q=${search}`,
+    `${SEARCH_URL}?q=${search.size > 0 ? search : DEFAULT_SEARCH}`,
     fetcher
   )
 
