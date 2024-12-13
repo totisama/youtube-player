@@ -1,17 +1,17 @@
 import styled from 'styled-components'
 import { useForm } from 'react-hook-form'
-import { useSearchParams } from 'react-router'
+import { useNavigate } from 'react-router'
 
 interface SearchFormData {
   search: string
 }
 
 export function SearchInput() {
-  const [, setSearchParams] = useSearchParams()
+  const navigate = useNavigate()
   const { register, handleSubmit } = useForm<SearchFormData>()
 
   const onSubmit = (data: SearchFormData) => {
-    setSearchParams(`search=${data.search}`)
+    navigate(`/?search=${data.search}`, { replace: true })
   }
 
   return (
