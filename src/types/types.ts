@@ -52,3 +52,12 @@ export interface IndependentVideo {
   likeCount: number
   dislikeCount: number
 }
+
+export interface MinimizeButtonProps {
+  isMinimized: boolean
+  onClick: () => void
+}
+
+export interface CloseButtonProps {
+  onClick: () => void
+}
