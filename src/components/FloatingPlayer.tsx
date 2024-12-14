@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router'
-import { useContext, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import { CurrentVideo } from '../lib/contexts/CurrentVideoContext'
 import { CurrentVideoType } from '../types/types'
 import styled from 'styled-components'
@@ -14,9 +14,11 @@ export const FloatingPlayer = () => {
   const location = useLocation()
   const isVideoListPage = location.pathname === '/'
   const videoUrl = url + `&t=${currentMinute.toFixed(0)}`
+  const currentMinuteRef = useRef(0)
 
-  const minimizePlayer = () => {
-    setIsMinimized(!isMinimized)
+  const toggleMinimize = () => {
+    setIsMinimized((prev) => !prev)
+    setCurrentMinute(currentMinuteRef.current)
   }
 
   if (!isVideoListPage || !shouldDisplay) return null
@@ -73,6 +75,9 @@ export const FloatingPlayer = () => {
             controls={true}
             width="100%"
             height="100%"
+            onProgress={(data) => {
+              currentMinuteRef.current = data.playedSeconds
+            }}
           />
         )}
       </AnimatePresence>
