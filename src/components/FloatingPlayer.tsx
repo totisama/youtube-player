@@ -4,6 +4,7 @@ import { CurrentVideo } from '../lib/contexts/CurrentVideoContext'
 import { CurrentVideoType } from '../types/types'
 import styled from 'styled-components'
 import ReactPlayer from 'react-player'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export const FloatingPlayer = () => {
   const { shouldDisplay, setShouldDisplay, url, currentMinute } = useContext(
@@ -14,20 +15,31 @@ export const FloatingPlayer = () => {
   const isVideoListPage = location.pathname === '/'
   const videoUrl = url + `&t=${currentMinute.toFixed(0)}`
 
+  const minimizePlayer = () => {
+    setIsMinimized(!isMinimized)
+  }
+
   if (!isVideoListPage || !shouldDisplay) return null
 
   return (
-    <Container>
+    <Container
+      as={motion.div}
+      animate={{
+        height: isMinimized ? '50px' : '300px',
+        width: isMinimized ? '200px' : '400px',
+      }}
+      transition={{ duration: 0.3 }}
+    >
       <TopHeader>
-        <MinimizePlayer onClick={() => setIsMinimized(!isMinimized)}>
+        <MinimizePlayer onClick={minimizePlayer}>
           {isMinimized ? (
             <svg
               viewBox="0 0 32 32"
               fill="currentColor"
-              style={{ width: '20px', height: '30px' }}
+              style={{ width: '10px', height: '20px' }}
             >
               <path
-                fill-rule="evenodd"
+                fillRule="evenodd"
                 d="M28 12h-8V4a4 4 0 1 0-8 0v8H4a4 4 0 1 0 0 8h8v8a4 4 0 1 0 8 0v-8h8a4 4 0 1 0 0-8"
               />
             </svg>
@@ -35,10 +47,10 @@ export const FloatingPlayer = () => {
             <svg
               viewBox="0 -12 32 32"
               fill="currentColor"
-              style={{ width: '20px', height: '30px' }}
+              style={{ width: '10px', height: '20px' }}
             >
               <path
-                fill-rule="evenodd"
+                fillRule="evenodd"
                 d="M28 0H4a4 4 0 1 0 0 8h24a4 4 0 1 0 0-8"
               />
             </svg>
@@ -53,36 +65,28 @@ export const FloatingPlayer = () => {
           </svg>
         </CloseButton>
       </TopHeader>
-      {isMinimized && (
-        <ReactPlayer
-          playing={true}
-          url={videoUrl}
-          controls={true}
-          width="100%"
-          height="100%"
-        />
-      )}
+      <AnimatePresence>
+        {!isMinimized && (
+          <ReactPlayer
+            playing={true}
+            url={videoUrl}
+            controls={true}
+            width="100%"
+            height="100%"
+          />
+        )}
+      </AnimatePresence>
     </Container>
   )
 }
 
-const Container = styled.article`
+const Container = styled(motion.article)`
   position: fixed;
   bottom: 0;
   right: 0;
-  width: 400px;
-  height: 300px;
   background-color: #000000;
-
-  header {
-    display: none;
-  }
-
-  &:hover {
-    header {
-      display: flex;
-    }
-  }
+  overflow: hidden;
+  border-radius: 8px;
 `
 
 const TopHeader = styled.header`
@@ -91,6 +95,7 @@ const TopHeader = styled.header`
   right: 0;
   background-color: rgba(150, 150, 150, 0.5);
   width: 100%;
+  display: flex;
   justify-content: space-between;
   padding: 5px;
 `

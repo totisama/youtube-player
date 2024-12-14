@@ -15,7 +15,7 @@ export function MainLayout() {
       <MainContent>
         <Outlet />
       </MainContent>
-      <FloatingPlayer></FloatingPlayer>
+      <FloatingPlayer />
     </LayoutContainer>
   )
 }
