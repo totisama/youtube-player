@@ -1,27 +1,64 @@
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
-import { CustomModal } from '../components/CreatePlaylistModal'
+import { CreatePlaylistModal } from '../components/CreatePlaylistModal'
 import { createPlaylist, deletePlaylist } from '../lib/playlist'
+import useSWR, { mutate } from 'swr'
+import { PLAYLIST_URL, USER_ID } from '../constants'
+import { fetcher } from '../utils/fetcher'
+import { PlaylistRespose } from '../types/types'
+import { Loader } from '../components/Loader'
+import { Link } from 'react-router'
+
+const MY_PLAYLISTS_URL = `${PLAYLIST_URL}?userId=${USER_ID}`
 
 export const Playlists = () => {
   const [openModal, setOpenModal] = useState(false)
-  const playlists = [
-    { id: 1, name: 'Chill Vibes' },
-    { id: 2, name: 'Workout Mix' },
-    { id: 3, name: 'Top Hits' },
-  ]
+  const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set())
+  const { data, error, isLoading } = useSWR<PlaylistRespose>(
+    MY_PLAYLISTS_URL,
+    fetcher
+  )
+  const playlists = data?.playlists
 
   const submitPlaylist = async (data: { name: string }) => {
-    const response = await createPlaylist(data)
-    console.log('Playlist created', response)
+    await createPlaylist(data)
+    await mutate(MY_PLAYLISTS_URL)
     setOpenModal(false)
   }
 
-  const removePlaylist = async (id: number) => {
+  const removePlaylist = async (id: string) => {
+    console.log('removing playlist', id)
+    setLoadingIds((prev) => new Set(prev).add(id))
     await deletePlaylist(id)
-    console.log('Playlist deleted')
+    await mutate(`${PLAYLIST_URL}?userId=${USER_ID}`)
+
+    setLoadingIds((prev) => {
+      const updated = new Set(prev)
+      updated.delete(id)
+      return updated
+    })
   }
+
+  if (error) {
+    return (
+      <LayoutContainer>
+        <Header>
+          <h1>Playlists</h1>
+          <CreateButton
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setOpenModal(true)}
+          >
+            + Create Playlist
+          </CreateButton>
+        </Header>
+        <strong>Error loading playlists</strong>
+      </LayoutContainer>
+    )
+  }
+
+  console.log('playlists', playlists)
 
   return (
     <LayoutContainer>
@@ -35,26 +72,31 @@ export const Playlists = () => {
           + Create Playlist
         </CreateButton>
       </Header>
-      <PlaylistList>
-        {playlists.map((playlist) => (
-          <PlaylistItem
-            key={playlist.id}
-            whileHover={{
-              scale: 1.05,
-              backgroundColor: '#282828',
-              color: '#fff',
-            }}
-            transition={{ type: 'spring', stiffness: 300 }}
-          >
-            {playlist.name}
-            {/* urGnSkfzpIfwgPlqsyaZn */}
-            <DeleteButton onClick={() => removePlaylist(playlist.id)}>
-              Delete
-            </DeleteButton>
-          </PlaylistItem>
-        ))}
-      </PlaylistList>
-      <CustomModal
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <PlaylistList>
+          {playlists &&
+            playlists.map((playlist) => (
+              <PlaylistItem key={playlist?.id}>
+                {playlist?.name}
+                {loadingIds.has(playlist?.id) ? (
+                  <Loader />
+                ) : (
+                  <div>
+                    <ViewButton to={`/playlist/${playlist?.id}`}>
+                      View
+                    </ViewButton>
+                    <DeleteButton onClick={() => removePlaylist(playlist?.id)}>
+                      Delete
+                    </DeleteButton>
+                  </div>
+                )}
+              </PlaylistItem>
+            ))}
+        </PlaylistList>
+      )}
+      <CreatePlaylistModal
         title="Create Playlist"
         isOpen={openModal}
         toggleModal={() => setOpenModal(false)}
@@ -111,13 +153,31 @@ const PlaylistList = styled.div`
   max-width: 800px;
 `
 
-const PlaylistItem = styled(motion.div)`
+const PlaylistItem = styled.div`
+  display: flex;
+  justify-content: space-between;
   padding: 15px;
   background-color: #2c2c2c;
   border-radius: 5px;
-  cursor: pointer;
   font-size: 1.2rem;
   transition: background-color 0.3s, transform 0.2s;
+`
+
+const ViewButton = styled(Link)`
+  display: inline-block;
+  background-color: #333333;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background-color 0.3s, transform 0.2s;
+
+  &:hover {
+    background-color: #aa0000;
+    transform: scale(1.05);
+  }
 `
 
 const DeleteButton = styled.button`
@@ -129,4 +189,10 @@ const DeleteButton = styled.button`
   cursor: pointer;
   font-size: 0.8rem;
   margin-left: 10px;
+  transition: background-color 0.3s, transform 0.2s;
+
+  &:hover {
+    background-color: #cc0000;
+    transform: scale(1.05);
+  }
 `
