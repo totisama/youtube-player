@@ -6,7 +6,7 @@ interface FormData {
   name: string
 }
 
-export const CustomModal = ({
+export const CreatePlaylistModal = ({
   isOpen,
   toggleModal,
   title,
