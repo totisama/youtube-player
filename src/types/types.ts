@@ -61,3 +61,12 @@ export interface MinimizeButtonProps {
 export interface CloseButtonProps {
   onClick: () => void
 }
+
+export interface PlaylistRespose {
+  playlists: VideoPlaylist[]
+}
+
+export interface VideoPlaylist {
+  name: string
+  id: string
+}
