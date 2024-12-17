@@ -6,10 +6,12 @@ import { useParams } from 'react-router'
 import { CurrentVideoType, IndependentVideo } from '../types/types'
 import { fetcher } from '../utils/fetcher'
 import { RelatedVideos } from '../components/RelatedVideos'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { CurrentVideo } from '../lib/contexts/CurrentVideoContext'
+import { AddToPlaylistModal } from '../components/AddToPlaylistModal'
 
 export const VideoDetails = () => {
+  const [openModal, setOpenModal] = useState(false)
   const { videoId } = useParams()
   const { data, error, isLoading } = useSWR<IndependentVideo>(
     `${VIDEO_URL}/${videoId}`,
@@ -18,6 +20,11 @@ export const VideoDetails = () => {
   const { setShouldDisplay, setUrl, setCurrentMinute } = useContext(
     CurrentVideo
   ) as CurrentVideoType
+
+  const addVideoToPlaylist = async (data: { playlist: string }) => {
+    console.log(data)
+    setOpenModal(false)
+  }
 
   if (isLoading) return <LoadingMessage>Loading...</LoadingMessage>
   if (error || !data)
@@ -48,9 +55,22 @@ export const VideoDetails = () => {
             </DatePublished>
           </DetailsRow>
           <Description>{data.description}</Description>
+          <AddToPlaylistButton
+            onClick={() => {
+              setOpenModal(true)
+            }}
+          >
+            Add to playlist
+          </AddToPlaylistButton>
         </PlayerSection>
         <RelatedVideos searchValue={data?.genre || data?.title} />
       </ContentContainer>
+      <AddToPlaylistModal
+        title="Add to Playlist"
+        isOpen={openModal}
+        toggleModal={() => setOpenModal(false)}
+        onAccept={addVideoToPlaylist}
+      />
     </PageContainer>
   )
 }
@@ -127,4 +147,21 @@ const ErrorMessage = styled.div`
   font-size: 1.2rem;
   text-align: center;
   color: #ff4c4c;
+`
+
+const AddToPlaylistButton = styled.button`
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-out, transform 0.3s ease-out;
+
+  &:hover {
+    background-color: #cc0000;
+    transform: scale(1.05);
+  }
 `
