@@ -4,6 +4,7 @@ import { VideoList } from './pages/VideoList'
 import { CurrentVideoProvider } from './lib/providers/CurrentVideoProvider'
 import { VideoDetails } from './pages/VideoDetails'
 import { Playlists } from './pages/Playlists'
+import { Playlist } from './components/Playlist'
 
 export default function App() {
   return (
@@ -14,6 +15,9 @@ export default function App() {
             <Route index element={<VideoList />} />
             <Route path="video/:videoId" element={<VideoDetails />} />
             <Route path="playlists" element={<Playlists />} />
+            <Route path="playlist/:playlistId" element={<Playlist />} />
+            {/* Use search param for video id */}
+            {/* <Route path="playlist/:playlistId/play" element={<PlaylistPlay />} /> */}
           </Route>
         </Routes>
       </BrowserRouter>
