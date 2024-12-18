@@ -66,9 +66,15 @@ export interface PlaylistRespose {
   playlists: VideoPlaylist[]
 }
 
+export interface PlaylistVideo {
+  videoId: string | undefined
+  title: string | undefined
+  thumbnailUrl: string | undefined
+}
+
 export interface VideoPlaylist {
   name: string
   id: string
   userId: string
-  videos: Video[]
+  videos: PlaylistVideo[]
 }
