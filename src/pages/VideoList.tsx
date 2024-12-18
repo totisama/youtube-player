@@ -6,6 +6,7 @@ import { fetcher } from '../utils/fetcher'
 import { SEARCH_URL } from '../constants'
 import { motion } from 'framer-motion'
 import { useSearchParams } from 'react-router'
+import { Loader } from '../components/Loader'
 
 const listVariants = {
   hidden: { opacity: 0 },
@@ -27,35 +28,35 @@ export function VideoList() {
   )
 
   if (error) {
+    return <Container>Error loading videos</Container>
+  }
+
+  if (isLoading) {
     return (
-      <HomeContainer>
-        <div>There was an error</div>
-      </HomeContainer>
+      <Container>
+        <Loader />
+      </Container>
     )
   }
 
   return (
-    <HomeContainer>
-      {isLoading || error ? (
-        <div>Loading...</div>
-      ) : (
-        <List
-          as={motion.div}
-          variants={listVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {data &&
-            data.map((video) => (
-              <VideoCard key={video.id.videoId} video={video} />
-            ))}
-        </List>
-      )}
-    </HomeContainer>
+    <Container>
+      <List
+        as={motion.div}
+        variants={listVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {data &&
+          data.map((video) => (
+            <VideoCard key={video.id.videoId} video={video} />
+          ))}
+      </List>
+    </Container>
   )
 }
 
-const HomeContainer = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

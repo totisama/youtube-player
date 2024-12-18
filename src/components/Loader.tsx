@@ -9,10 +9,10 @@ const spin = keyframes`
   }
 `
 
-export const Spinner = styled.div`
+const Spinner = styled.div`
   display: inline-block;
-  height: 2rem;
-  width: 2rem;
+  height: 4rem;
+  width: 4rem;
   border: 4px solid currentColor;
   border-right-color: transparent;
   border-radius: 50%;
@@ -21,7 +21,7 @@ export const Spinner = styled.div`
   position: relative;
 `
 
-export const VisuallyHidden = styled.span`
+const VisuallyHidden = styled.span`
   position: absolute;
   height: 1px;
   width: 1px;

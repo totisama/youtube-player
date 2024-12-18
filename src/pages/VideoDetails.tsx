@@ -10,6 +10,7 @@ import { useContext, useState } from 'react'
 import { CurrentVideo } from '../lib/contexts/CurrentVideoContext'
 import { AddToPlaylistModal } from '../components/AddToPlaylistModal'
 import { addVideoToPlaylist } from '../lib/playlist'
+import { Loader } from '../components/Loader'
 
 export const VideoDetails = () => {
   const [openModal, setOpenModal] = useState(false)
@@ -31,9 +32,16 @@ export const VideoDetails = () => {
     setOpenModal(false)
   }
 
-  if (isLoading) return <LoadingMessage>Loading...</LoadingMessage>
-  if (error || !data)
-    return <ErrorMessage>Failed to load video details.</ErrorMessage>
+  if (isLoading) {
+    return (
+      <MessageContainer>
+        <Loader />
+      </MessageContainer>
+    )
+  }
+  if (error || !data) {
+    return <MessageContainer>Failed to load playlist</MessageContainer>
+  }
 
   return (
     <PageContainer>
@@ -142,18 +150,6 @@ const Description = styled.p`
   line-height: 1.5;
 `
 
-const LoadingMessage = styled.div`
-  font-size: 1.2rem;
-  text-align: center;
-  color: #cccccc;
-`
-
-const ErrorMessage = styled.div`
-  font-size: 1.2rem;
-  text-align: center;
-  color: #ff4c4c;
-`
-
 const AddToPlaylistButton = styled.button`
   margin-top: 10px;
   padding: 10px 20px;
@@ -169,4 +165,15 @@ const AddToPlaylistButton = styled.button`
     background-color: #cc0000;
     transform: scale(1.05);
   }
+`
+
+const MessageContainer = styled.div`
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
 `
