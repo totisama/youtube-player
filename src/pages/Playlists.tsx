@@ -84,9 +84,6 @@ export const Playlists = () => {
                     <ViewButton to={`/playlist/${playlist?.id}`}>
                       View
                     </ViewButton>
-                    <EditButton to={`/playlist/edit/${playlist?.id}`}>
-                      Edit
-                    </EditButton>
                     <DeleteButton onClick={() => removePlaylist(playlist?.id)}>
                       Delete
                     </DeleteButton>
@@ -186,32 +183,19 @@ const DeleteButton = styled.button`
 
 const BaseLinkButton = styled(Link)`
   display: inline-block;
-  color: white;
   border: none;
   border-radius: 5px;
   padding: 5px 10px;
   cursor: pointer;
   font-size: 0.8rem;
   transition: background-color 0.3s, transform 0.2s;
-  background-color: #ff0000;
-
-  &:hover {
-    background-color: #cc0000;
-  }
-`
-
-const EditButton = styled(BaseLinkButton)`
-  background-color: #333333;
-
-  &:hover {
-    background-color: #aa0000;
-  }
 `
 
 const ViewButton = styled(BaseLinkButton)`
-  background-color: #333333;
+  background-color: #0077ff;
+  color: #ffffff;
 
   &:hover {
-    background-color: #aa0000;
+    background-color: #005fcc;
   }
 `
