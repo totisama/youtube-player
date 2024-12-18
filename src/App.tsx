@@ -4,7 +4,7 @@ import { VideoList } from './pages/VideoList'
 import { CurrentVideoProvider } from './lib/providers/CurrentVideoProvider'
 import { VideoDetails } from './pages/VideoDetails'
 import { Playlists } from './pages/Playlists'
-import { Playlist } from './components/Playlist'
+import { Playlist } from './pages/Playlist'
 
 export default function App() {
   return (

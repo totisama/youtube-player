@@ -1,0 +1,96 @@
+import styled from 'styled-components'
+import { motion } from 'framer-motion'
+import { PlaylistVideoCard } from '../components/PlaylistVideoCard'
+import { Link, useParams } from 'react-router'
+import useSWR from 'swr'
+import { PLAYLIST_URL } from '../constants'
+import { fetcher } from '../utils/fetcher'
+import { VideoPlaylist } from '../types/types'
+import { Loader } from '../components/Loader'
+
+const listVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+}
+
+export const Playlist = () => {
+  const { playlistId } = useParams()
+  const { data, error, isLoading } = useSWR<VideoPlaylist>(
+    `${PLAYLIST_URL}/${playlistId}`,
+    fetcher
+  )
+  const videos = data?.videos
+
+  if (error) {
+    return <Container>Failed to load playlist</Container>
+  }
+
+  if (isLoading) {
+    return (
+      <Container>
+        <Loader />
+      </Container>
+    )
+  }
+
+  return (
+    <Container>
+      <Title>{data?.name}</Title>
+      <ActionsContainer>
+        <PlayButton to={`/playlist/${playlistId}/play`}>Play All</PlayButton>
+      </ActionsContainer>
+      <List
+        as={motion.div}
+        variants={listVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {videos &&
+          videos.map((video) => (
+            <PlaylistVideoCard key={video.videoId} video={video} />
+          ))}
+      </List>
+    </Container>
+  )
+}
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+`
+
+const Title = styled.h1`
+  font-size: 40px;
+  color: white;
+`
+
+const ActionsContainer = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+  max-width: 800px;
+`
+
+const PlayButton = styled(Link)`
+  padding: 8px 16px;
+  background: #333;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+`
+
+const List = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  width: 100%;
+  max-width: 800px;
+`
