@@ -8,7 +8,7 @@ import { PLAYLIST_URL, USER_ID } from '../constants'
 import { Loader } from './Loader'
 
 interface FormData {
-  playlist: string
+  playlistId: string
 }
 
 export const AddToPlaylistModal = ({
@@ -43,9 +43,9 @@ export const AddToPlaylistModal = ({
         <Loader />
       ) : (
         <Form onSubmit={handleSubmit(onAccept)}>
-          <Label htmlFor="playlist">Playlist Name</Label>
+          <Label htmlFor="playlistId">Playlist Name</Label>
           <Select
-            {...register('playlist', {
+            {...register('playlistId', {
               required: { value: true, message: 'Required' },
             })}
           >

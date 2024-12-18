@@ -9,6 +9,7 @@ import { RelatedVideos } from '../components/RelatedVideos'
 import { useContext, useState } from 'react'
 import { CurrentVideo } from '../lib/contexts/CurrentVideoContext'
 import { AddToPlaylistModal } from '../components/AddToPlaylistModal'
+import { addVideoToPlaylist } from '../lib/playlist'
 
 export const VideoDetails = () => {
   const [openModal, setOpenModal] = useState(false)
@@ -21,8 +22,12 @@ export const VideoDetails = () => {
     CurrentVideo
   ) as CurrentVideoType
 
-  const addVideoToPlaylist = async (data: { playlist: string }) => {
-    console.log(data)
+  const addVideo = async ({ playlistId }: { playlistId: string }) => {
+    await addVideoToPlaylist(playlistId, {
+      videoId: videoId,
+      title: data?.title,
+      thumbnailUrl: data?.thumbnailUrl,
+    })
     setOpenModal(false)
   }
 
@@ -69,7 +74,7 @@ export const VideoDetails = () => {
         title="Add to Playlist"
         isOpen={openModal}
         toggleModal={() => setOpenModal(false)}
-        onAccept={addVideoToPlaylist}
+        onAccept={addVideo}
       />
     </PageContainer>
   )

@@ -28,7 +28,6 @@ export const Playlists = () => {
   }
 
   const removePlaylist = async (id: string) => {
-    console.log('removing playlist', id)
     setLoadingIds((prev) => new Set(prev).add(id))
     await deletePlaylist(id)
     await mutate(`${PLAYLIST_URL}?userId=${USER_ID}`)
@@ -58,8 +57,6 @@ export const Playlists = () => {
     )
   }
 
-  console.log('playlists', playlists)
-
   return (
     <LayoutContainer>
       <Header>
@@ -83,14 +80,17 @@ export const Playlists = () => {
                 {loadingIds.has(playlist?.id) ? (
                   <Loader />
                 ) : (
-                  <div>
+                  <ButtonsContainer>
                     <ViewButton to={`/playlist/${playlist?.id}`}>
                       View
                     </ViewButton>
+                    <EditButton to={`/playlist/edit/${playlist?.id}`}>
+                      Edit
+                    </EditButton>
                     <DeleteButton onClick={() => removePlaylist(playlist?.id)}>
                       Delete
                     </DeleteButton>
-                  </div>
+                  </ButtonsContainer>
                 )}
               </PlaylistItem>
             ))}
@@ -163,36 +163,55 @@ const PlaylistItem = styled.div`
   transition: background-color 0.3s, transform 0.2s;
 `
 
-const ViewButton = styled(Link)`
-  display: inline-block;
-  background-color: #333333;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-  font-size: 0.8rem;
-  transition: background-color 0.3s, transform 0.2s;
-
-  &:hover {
-    background-color: #aa0000;
-    transform: scale(1.05);
-  }
+const ButtonsContainer = styled.div`
+  display: flex;
+  gap: 5px;
 `
 
 const DeleteButton = styled.button`
-  background-color: #ff0000;
+  display: inline-block;
   color: white;
   border: none;
   border-radius: 5px;
   padding: 5px 10px;
   cursor: pointer;
   font-size: 0.8rem;
-  margin-left: 10px;
   transition: background-color 0.3s, transform 0.2s;
+  background-color: #ff0000;
 
   &:hover {
     background-color: #cc0000;
-    transform: scale(1.05);
+  }
+`
+
+const BaseLinkButton = styled(Link)`
+  display: inline-block;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background-color 0.3s, transform 0.2s;
+  background-color: #ff0000;
+
+  &:hover {
+    background-color: #cc0000;
+  }
+`
+
+const EditButton = styled(BaseLinkButton)`
+  background-color: #333333;
+
+  &:hover {
+    background-color: #aa0000;
+  }
+`
+
+const ViewButton = styled(BaseLinkButton)`
+  background-color: #333333;
+
+  &:hover {
+    background-color: #aa0000;
   }
 `
