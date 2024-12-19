@@ -67,9 +67,9 @@ export interface PlaylistRespose {
 }
 
 export interface PlaylistVideo {
-  videoId: string | undefined
-  title: string | undefined
-  thumbnailUrl: string | undefined
+  videoId: string
+  title: string
+  thumbnailUrl: string
 }
 
 export interface VideoPlaylist {
