@@ -29,6 +29,14 @@ export interface Thumbnails {
   width: number
 }
 
+export interface PlaylistContextType {
+  videos: PlaylistVideo[]
+  updatePlaylist: (playlistId: string, videoId: string | null) => void
+  currentPlaylist: VideoPlaylist | null
+  nextVideo: () => PlaylistVideo
+  changeToVideo: (videoId: string) => void
+}
+
 export interface CurrentVideoType {
   shouldDisplay: boolean
   setShouldDisplay: (value: boolean) => void
@@ -67,9 +75,9 @@ export interface PlaylistRespose {
 }
 
 export interface PlaylistVideo {
-  videoId: string
-  title: string
-  thumbnailUrl: string
+  videoId: string | undefined
+  title: string | undefined
+  thumbnailUrl: string | undefined
 }
 
 export interface VideoPlaylist {
