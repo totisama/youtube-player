@@ -40,9 +40,9 @@ export const PlaylistVideos = ({
                 to={`/playlist/${playlistId}/play?videoId=${video.videoId}`}
               >
                 {isCurrent && (
-                  <PlayingContainer>
-                    <Playing>Playing</Playing>
-                  </PlayingContainer>
+                  <CurrentContainer>
+                    <Current>Current</Current>
+                  </CurrentContainer>
                 )}
                 <VideoInfo>
                   <Thumbnail src={video.thumbnailUrl} alt={video.title} />
@@ -105,13 +105,13 @@ const VideoInfo = styled.div`
   align-items: center;
 `
 
-const PlayingContainer = styled.div`
+const CurrentContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 5px;
 `
 
-const Playing = styled.span`
+const Current = styled.span`
   color: #ffcc00;
   font-size: 0.9rem;
 `
