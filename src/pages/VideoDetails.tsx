@@ -40,7 +40,7 @@ export const VideoDetails = () => {
     )
   }
   if (error || !data) {
-    return <MessageContainer>Failed to load playlist</MessageContainer>
+    return <MessageContainer>Failed to load video</MessageContainer>
   }
 
   return (
