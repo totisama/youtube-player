@@ -6,7 +6,7 @@ import { fetcher } from '../utils/fetcher'
 import useSWR from 'swr'
 
 interface SidebarVideo {
-  isCurrent: boolean
+  $isCurrent: boolean
 }
 
 export const PlaylistVideos = ({
@@ -22,7 +22,8 @@ export const PlaylistVideos = ({
   )
   const videos = data?.videos
 
-  const isCurrentVideo = (videoId: string) => videoId === currentVideoId
+  const isCurrentVideo = (videoId: string | undefined) =>
+    videoId === currentVideoId
 
   return (
     <Sidebar>
@@ -35,7 +36,7 @@ export const PlaylistVideos = ({
 
             return (
               <SidebarVideo
-                isCurrent={isCurrent}
+                $isCurrent={isCurrent}
                 key={video.videoId}
                 to={`/playlist/${playlistId}/play?videoId=${video.videoId}`}
               >
@@ -90,10 +91,11 @@ const SidebarVideo = styled(Link)<SidebarVideo>`
   padding: 5px 10px 10px;
   border: 1px solid #444444;
   border-radius: 8px;
-  background-color: ${({ isCurrent }) => (isCurrent ? ' #555555;' : '#333333')};
+  background-color: ${({ $isCurrent }) =>
+    $isCurrent ? ' #555555;' : '#333333'};
 
-  ${({ isCurrent }) =>
-    !isCurrent &&
+  ${({ $isCurrent }) =>
+    !$isCurrent &&
     `&:hover {
       background-color: #555555;
     }`};
