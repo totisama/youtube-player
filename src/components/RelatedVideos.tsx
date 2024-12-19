@@ -3,6 +3,7 @@ import { SEARCH_URL } from '../constants'
 import { Video } from '../types/types'
 import useSWR from 'swr'
 import { fetcher } from '../utils/fetcher'
+import { Link } from 'react-router'
 
 export const RelatedVideos = ({ searchValue }: { searchValue: string }) => {
   const { data: relatedVideosData } = useSWR<Video[]>(
@@ -19,7 +20,7 @@ export const RelatedVideos = ({ searchValue }: { searchValue: string }) => {
           relatedVideosData.map((video) => (
             <SidebarVideo
               key={video.id.videoId}
-              href={`/video/${video.id.videoId}`}
+              to={`/video/${video.id.videoId}`}
             >
               <Thumbnail src={video.snippet.thumbnails.url} alt={video.title} />
               <RelatedVideoTitle>{video.title}</RelatedVideoTitle>
@@ -31,15 +32,18 @@ export const RelatedVideos = ({ searchValue }: { searchValue: string }) => {
 }
 
 const Sidebar = styled.div`
-  flex: 1;
   min-width: 250px;
+  max-width: 300px;
   background: #2c2c2c;
   padding: 10px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  height: 100%;
+  max-height: 600px;
 
   @media (max-width: 768px) {
     width: 100%;
+    max-width: 100%;
   }
 `
 
@@ -57,7 +61,7 @@ const SidebarContent = styled.div`
   overflow-y: scroll;
 `
 
-const SidebarVideo = styled.a`
+const SidebarVideo = styled(Link)`
   display: flex;
   align-items: center;
   gap: 10px;
