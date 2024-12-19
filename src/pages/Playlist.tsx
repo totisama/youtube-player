@@ -38,11 +38,19 @@ export const Playlist = () => {
     )
   }
 
+  if (!videos || videos?.length === 0) {
+    return <Container>No videos found</Container>
+  }
+
   return (
     <Container>
       <Title>{data?.name}</Title>
       <ActionsContainer>
-        <PlayButton to={`/playlist/${playlistId}/play`}>Play All</PlayButton>
+        <PlayButton
+          to={`/playlist/${playlistId}/play?videoId=${videos[0].videoId}`}
+        >
+          Play All
+        </PlayButton>
       </ActionsContainer>
       <List
         as={motion.div}
