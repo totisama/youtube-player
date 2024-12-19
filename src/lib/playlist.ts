@@ -4,7 +4,7 @@ import { PlaylistVideo, VideoPlaylist } from '../types/types'
 export const getPlaylist = async (id: string) => {
   const response = await fetch(`${PLAYLIST_URL}/${id}`)
 
-  return await response.json()
+  return (await response.json()) as VideoPlaylist
 }
 
 export const createPlaylist = async (data: { name: string }) => {

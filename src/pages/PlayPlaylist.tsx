@@ -9,12 +9,16 @@ import { useContext } from 'react'
 import { CurrentVideo } from '../lib/contexts/CurrentVideoContext'
 import { Loader } from '../components/Loader'
 import { PlaylistVideos } from '../components/PlaylistVideos'
+import { usePlaylist } from '../hooks/usePlaylist'
 
 export const PlayPlaylist = () => {
   const { playlistId } = useParams()
   const [searchParams] = useSearchParams()
   const videoId = searchParams.get('videoId')
-
+  const { changeToNextVideo, changeVideo } = usePlaylist({
+    playlistId,
+    videoId,
+  })
   const { data, error, isLoading } = useSWR<IndependentVideo>(
     `${VIDEO_URL}/${videoId}`,
     fetcher
@@ -45,6 +49,7 @@ export const PlayPlaylist = () => {
         <PlayerSection>
           <PlayerContainer>
             <ReactPlayer
+              playing={true}
               url={data.url}
               controls={true}
               width="100%"
@@ -54,6 +59,7 @@ export const PlayPlaylist = () => {
                 setShouldDisplay(true)
               }}
               onProgress={(data) => setCurrentMinute(data.playedSeconds)}
+              onEnded={changeToNextVideo}
             />
           </PlayerContainer>
           <Title>{data.title}</Title>
@@ -65,7 +71,11 @@ export const PlayPlaylist = () => {
           </DetailsRow>
           <Description>{data.description}</Description>
         </PlayerSection>
-        <PlaylistVideos playlistId={playlistId} currentVideoId={videoId} />
+        <PlaylistVideos
+          playlistId={playlistId}
+          currentVideoId={videoId}
+          changeVideo={changeVideo}
+        />
       </ContentContainer>
     </PageContainer>
   )

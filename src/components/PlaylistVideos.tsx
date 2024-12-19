@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 import { VideoPlaylist } from '../types/types'
-import { Link } from 'react-router'
 import { PLAYLIST_URL } from '../constants'
 import { fetcher } from '../utils/fetcher'
 import useSWR from 'swr'
+import { useNavigate } from 'react-router'
 
 interface SidebarVideo {
   $isCurrent: boolean
@@ -12,10 +12,13 @@ interface SidebarVideo {
 export const PlaylistVideos = ({
   playlistId,
   currentVideoId,
+  changeVideo,
 }: {
   playlistId: string
   currentVideoId: string
+  changeVideo: (videoId: string) => void
 }) => {
+  const navigate = useNavigate()
   const { data } = useSWR<VideoPlaylist>(
     `${PLAYLIST_URL}/${playlistId}`,
     fetcher
@@ -38,7 +41,12 @@ export const PlaylistVideos = ({
               <SidebarVideo
                 $isCurrent={isCurrent}
                 key={video.videoId}
-                to={`/playlist/${playlistId}/play?videoId=${video.videoId}`}
+                onClick={() => {
+                  changeVideo(video.videoId as string)
+                  navigate(
+                    `/playlist/${playlistId}/play?videoId=${video.videoId}`
+                  )
+                }}
               >
                 {isCurrent && (
                   <CurrentContainer>
@@ -87,7 +95,7 @@ const SidebarContent = styled.div`
   overflow-y: scroll;
 `
 
-const SidebarVideo = styled(Link)<SidebarVideo>`
+const SidebarVideo = styled.button<SidebarVideo>`
   padding: 5px 10px 10px;
   border: 1px solid #444444;
   border-radius: 8px;
