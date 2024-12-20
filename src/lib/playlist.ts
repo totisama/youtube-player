@@ -47,3 +47,22 @@ export const deletePlaylist = async (id: string) => {
 
   return await response.json()
 }
+
+export const deleteVideoFromPlaylist = async (
+  videoId: string,
+  playlistId: string
+) => {
+  const playlist: VideoPlaylist = await getPlaylist(playlistId)
+
+  playlist.videos = playlist.videos.filter((video) => video.videoId !== videoId)
+
+  const response = await fetch(`${PLAYLIST_URL}/${playlistId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(playlist),
+  })
+
+  return await response.json()
+}

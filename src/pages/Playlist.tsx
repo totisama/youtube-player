@@ -2,11 +2,12 @@ import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { PlaylistVideoCard } from '../components/PlaylistVideoCard'
 import { Link, useParams } from 'react-router'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import { PLAYLIST_URL } from '../constants'
 import { fetcher } from '../utils/fetcher'
 import { VideoPlaylist } from '../types/types'
 import { Loader } from '../components/Loader'
+import { deleteVideoFromPlaylist } from '../lib/playlist'
 
 const listVariants = {
   hidden: { opacity: 0 },
@@ -25,6 +26,13 @@ export const Playlist = () => {
     fetcher
   )
   const videos = data?.videos
+
+  const removeVideo = async (videoId: string | undefined) => {
+    if (!playlistId || !videoId) return
+
+    await deleteVideoFromPlaylist(videoId, playlistId)
+    await mutate(`${PLAYLIST_URL}/${playlistId}`)
+  }
 
   if (error) {
     return <Container>Failed to load playlist</Container>
@@ -60,7 +68,11 @@ export const Playlist = () => {
       >
         {videos &&
           videos.map((video) => (
-            <PlaylistVideoCard key={video.videoId} video={video} />
+            <PlaylistVideoCard
+              key={video.videoId}
+              video={video}
+              removeVideo={removeVideo}
+            />
           ))}
       </List>
     </Container>
