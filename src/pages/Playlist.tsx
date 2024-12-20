@@ -23,7 +23,8 @@ export const Playlist = () => {
   const { playlistId } = useParams()
   const { data, error, isLoading } = useSWR<VideoPlaylist>(
     `${PLAYLIST_URL}/${playlistId}`,
-    fetcher
+    fetcher,
+    { refreshInterval: 5000 }
   )
   const videos = data?.videos
 
