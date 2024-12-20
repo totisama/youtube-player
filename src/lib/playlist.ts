@@ -66,3 +66,16 @@ export const deleteVideoFromPlaylist = async (
 
   return await response.json()
 }
+
+export const updatePlaylist = async (playlist: VideoPlaylist) => {
+  const response = await fetch(`${PLAYLIST_URL}/${playlist.id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(playlist),
+  })
+  console.log(response)
+
+  return await response.json()
+}
