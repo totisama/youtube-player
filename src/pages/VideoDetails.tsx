@@ -60,7 +60,16 @@ export const VideoDetails = () => {
               onProgress={(data) => setCurrentMinute(data.playedSeconds)}
             />
           </PlayerContainer>
-          <Title>{data.title}</Title>
+          <TitleContainer>
+            <Title>{data.title}</Title>
+            <AddToPlaylistButton
+              onClick={() => {
+                setOpenModal(true)
+              }}
+            >
+              Add to playlist
+            </AddToPlaylistButton>
+          </TitleContainer>
           <DetailsRow>
             <Views>{data.views.toLocaleString()} views</Views>
             <DatePublished>
@@ -68,13 +77,6 @@ export const VideoDetails = () => {
             </DatePublished>
           </DetailsRow>
           <Description>{data.description}</Description>
-          <AddToPlaylistButton
-            onClick={() => {
-              setOpenModal(true)
-            }}
-          >
-            Add to playlist
-          </AddToPlaylistButton>
         </PlayerSection>
         <RelatedVideos searchValue={data?.genre || data?.title} />
       </ContentContainer>
@@ -121,10 +123,24 @@ const PlayerContainer = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 `
 
+const TitleContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  padding-right: 20px;
+`
+
 const Title = styled.h1`
-  font-size: 1.8rem;
+  max-width: 600px;
+  font-size: 28px;
   margin-top: 20px;
   color: #ffffff;
+
+  @media (max-width: 768px) {
+    font-size: 22px;
+    max-width: 300px;
+  }
 `
 
 const DetailsRow = styled.div`
