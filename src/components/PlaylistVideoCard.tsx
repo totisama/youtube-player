@@ -4,6 +4,8 @@ import { motion } from 'framer-motion'
 
 interface VideoCardProps {
   video: PlaylistVideo
+  disabled?: boolean
+  swapyItem?: string
   removeVideo: (videoId: string | undefined) => void
 }
 
@@ -12,15 +14,27 @@ const itemVariants = {
   visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
 }
 
-export function PlaylistVideoCard({ video, removeVideo }: VideoCardProps) {
+export function PlaylistVideoCard({
+  video,
+  removeVideo,
+  swapyItem,
+  disabled = false,
+}: VideoCardProps) {
   return (
-    <Card as={motion.article} variants={itemVariants}>
+    <Card
+      as={motion.article}
+      data-swapy-item={swapyItem}
+      variants={itemVariants}
+    >
       <ThumbnailWrapper>
         <Thumbnail src={video.thumbnailUrl} alt={video.title} />
       </ThumbnailWrapper>
       <Content>
         <Title>{video.title}</Title>
-        <RemoveButton onClick={() => removeVideo(video.videoId)}>
+        <RemoveButton
+          disabled={disabled}
+          onClick={() => removeVideo(video.videoId)}
+        >
           Remove
         </RemoveButton>
       </Content>
