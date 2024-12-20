@@ -1,13 +1,16 @@
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { PlaylistVideoCard } from '../components/PlaylistVideoCard'
-import { Link, useParams } from 'react-router'
+import { useParams } from 'react-router'
 import useSWR, { mutate } from 'swr'
 import { PLAYLIST_URL } from '../constants'
 import { fetcher } from '../utils/fetcher'
 import { VideoPlaylist } from '../types/types'
 import { Loader } from '../components/Loader'
-import { deleteVideoFromPlaylist } from '../lib/playlist'
+import { deleteVideoFromPlaylist, updatePlaylist } from '../lib/playlist'
+import { useRef, useState } from 'react'
+import { SweapablePlaylistVideos } from '../components/SweapablePlaylistVideos'
+import { PlaylistActions } from '../components/PlaylistActions'
 
 const listVariants = {
   hidden: { opacity: 0 },
@@ -21,6 +24,9 @@ const listVariants = {
 
 export const Playlist = () => {
   const { playlistId } = useParams()
+  const [isSwaping, setIsSwaping] = useState(false)
+  const videosOrder = useRef<string[]>([])
+
   const { data, error, isLoading } = useSWR<VideoPlaylist>(
     `${PLAYLIST_URL}/${playlistId}`,
     fetcher,
@@ -28,10 +34,41 @@ export const Playlist = () => {
   )
   const videos = data?.videos
 
+  const toggleSwaping = () => {
+    setIsSwaping(!isSwaping)
+  }
+
   const removeVideo = async (videoId: string | undefined) => {
     if (!playlistId || !videoId) return
 
     await deleteVideoFromPlaylist(videoId, playlistId)
+    await mutate(`${PLAYLIST_URL}/${playlistId}`)
+  }
+
+  const saveVideosOrder = async () => {
+    if (!playlistId) {
+      console.error('No playlist id found')
+      return
+    }
+
+    if (videosOrder.current.length !== videos?.length) {
+      console.error('Videos order length does not match')
+      return
+    }
+
+    const videosNewOrder = videosOrder.current.map((videoId) =>
+      data?.videos.find((video) => video.videoId === videoId)
+    )
+
+    if (videosNewOrder.includes(undefined)) {
+      console.error('Failed to reorder videos due to missing video data')
+      return
+    }
+
+    const playlist = { ...data, videos: videosNewOrder } as VideoPlaylist
+
+    await updatePlaylist(playlist)
+    setIsSwaping(false)
     await mutate(`${PLAYLIST_URL}/${playlistId}`)
   }
 
@@ -54,28 +91,31 @@ export const Playlist = () => {
   return (
     <Container>
       <Title>{data?.name}</Title>
-      <ActionsContainer>
-        <PlayButton
-          to={`/playlist/${playlistId}/play?videoId=${videos[0].videoId}`}
+      <PlaylistActions
+        isSwaping={isSwaping}
+        playlistId={playlistId}
+        videoId={videos[0].videoId}
+        toggleSwaping={toggleSwaping}
+        saveVideosOrder={saveVideosOrder}
+      />
+      {isSwaping ? (
+        <SweapablePlaylistVideos videos={videos} videosOrder={videosOrder} />
+      ) : (
+        <List
+          as={motion.div}
+          variants={listVariants}
+          initial="hidden"
+          animate="visible"
         >
-          Play All
-        </PlayButton>
-      </ActionsContainer>
-      <List
-        as={motion.div}
-        variants={listVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        {videos &&
-          videos.map((video) => (
+          {videos.map((video) => (
             <PlaylistVideoCard
               key={video.videoId}
               video={video}
               removeVideo={removeVideo}
             />
           ))}
-      </List>
+        </List>
+      )}
     </Container>
   )
 }
@@ -90,22 +130,6 @@ const Container = styled.div`
 const Title = styled.h1`
   font-size: 40px;
   color: white;
-`
-
-const ActionsContainer = styled.div`
-  width: 100%;
-  display: flex;
-  gap: 16px;
-  justify-content: flex-end;
-  max-width: 800px;
-`
-
-const PlayButton = styled(Link)`
-  padding: 8px 16px;
-  background: #333;
-  color: white;
-  border-radius: 8px;
-  text-decoration: none;
 `
 
 const List = styled.div`
