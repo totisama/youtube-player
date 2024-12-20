@@ -34,6 +34,20 @@ Open [http://localhost:5173](http://localhost:5173) in your browser to see the r
 - React
 - TypeScript
 - Styled Components
+- SWR
+- Axios
+
+## 🧪 Features
+
+- Search and play youtube videos
+- Play video while searching
+- Create playlists
+- Add video to playlist
+- Remove video from playlist
+- Poll playlist changes
+- Play playlist
+- Rearrenge playlist videos
+- Import Youtube playlist
 
 ## 🪪 License
 
