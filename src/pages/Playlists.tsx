@@ -9,11 +9,13 @@ import { fetcher } from '../utils/fetcher'
 import { PlaylistRespose } from '../types/types'
 import { Loader } from '../components/Loader'
 import { Link } from 'react-router'
+import { ImportPlaylistModal } from '../components/ImportPlaylistModal'
 
 const MY_PLAYLISTS_URL = `${PLAYLIST_URL}?userId=${USER_ID}`
 
 export const Playlists = () => {
-  const [openModal, setOpenModal] = useState(false)
+  const [openCreateModal, setOpenCreateModal] = useState(false)
+  const [openImportModal, setOpenImportModal] = useState(false)
   const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set())
   const { data, error, isLoading } = useSWR<PlaylistRespose>(
     MY_PLAYLISTS_URL,
@@ -24,7 +26,7 @@ export const Playlists = () => {
   const submitPlaylist = async (data: { name: string }) => {
     await createPlaylist(data)
     await mutate(MY_PLAYLISTS_URL)
-    setOpenModal(false)
+    setOpenCreateModal(false)
   }
 
   const removePlaylist = async (id: string) => {
@@ -44,13 +46,22 @@ export const Playlists = () => {
       <LayoutContainer>
         <Header>
           <h1>Playlists</h1>
-          <CreateButton
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setOpenModal(true)}
-          >
-            + Create Playlist
-          </CreateButton>
+          <ActionsContainer>
+            <CreateButton
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setOpenImportModal(true)}
+            >
+              Import playlist
+            </CreateButton>
+            <CreateButton
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setOpenCreateModal(true)}
+            >
+              + Create Playlist
+            </CreateButton>
+          </ActionsContainer>
         </Header>
         <strong>Error loading playlists</strong>
       </LayoutContainer>
@@ -61,13 +72,22 @@ export const Playlists = () => {
     <LayoutContainer>
       <Header>
         <h1>Playlists</h1>
-        <CreateButton
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => setOpenModal(true)}
-        >
-          + Create Playlist
-        </CreateButton>
+        <ActionsContainer>
+          <CreateButton
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setOpenImportModal(true)}
+          >
+            Import playlist
+          </CreateButton>
+          <CreateButton
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setOpenCreateModal(true)}
+          >
+            + Create Playlist
+          </CreateButton>
+        </ActionsContainer>
       </Header>
       {isLoading ? (
         <Loader />
@@ -95,9 +115,14 @@ export const Playlists = () => {
       )}
       <CreatePlaylistModal
         title="Create Playlist"
-        isOpen={openModal}
-        toggleModal={() => setOpenModal(false)}
+        isOpen={openCreateModal}
+        toggleModal={() => setOpenCreateModal(false)}
         onAccept={submitPlaylist}
+      />
+      <ImportPlaylistModal
+        title="Import Playlist"
+        isOpen={openImportModal}
+        toggleModal={() => setOpenImportModal(false)}
       />
     </LayoutContainer>
   )
@@ -125,6 +150,11 @@ const Header = styled.div`
     font-size: 2rem;
     margin: 0;
   }
+`
+
+const ActionsContainer = styled.div`
+  display: flex;
+  gap: 10px;
 `
 
 const CreateButton = styled(motion.button)`

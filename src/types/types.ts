@@ -23,10 +23,11 @@ export interface Snippet {
 }
 
 export interface Thumbnails {
-  id: string
-  url: string
-  height: number
-  width: number
+  default: Default
+  medium: Default
+  high: Default
+  standard: Default
+  maxres: Default
 }
 
 export interface PlaylistContextType {
@@ -85,4 +86,84 @@ export interface VideoPlaylist {
   id: string
   userId: string
   videos: PlaylistVideo[]
+}
+
+export interface PlaylistResponse {
+  kind: string
+  etag: string
+  items: PlaylistItem[]
+  pageInfo: PageInfo
+}
+
+export interface PlaylistItem {
+  kind: string
+  etag: string
+  id: string
+  snippet: PlaylistItemSnippet
+  contentDetails: ContentDetails
+}
+
+export interface ContentDetails {
+  videoId: string
+  videoPublishedAt: Date
+}
+
+export interface PlaylistItemSnippet {
+  publishedAt: Date
+  channelId: string
+  title: string
+  description: string
+  thumbnails: Thumbnails
+  channelTitle: string
+  playlistId: string
+  position: number
+  resourceId: ResourceID
+  videoOwnerChannelTitle: string
+  videoOwnerChannelId: string
+}
+
+export interface ResourceID {
+  kind: string
+  videoId: string
+}
+
+export interface Default {
+  url: string
+  width: number
+  height: number
+}
+
+export interface PageInfo {
+  totalResults: number
+  resultsPerPage: number
+}
+
+export interface PlaylistMetadataResponse {
+  kind: string
+  etag: string
+  pageInfo: PageInfo
+  items: PlaylistMetadataItem[]
+}
+
+export interface PlaylistMetadataItem {
+  kind: string
+  etag: string
+  id: string
+  snippet: PlaylistMetadataSnippet
+}
+
+export interface PlaylistMetadataSnippet {
+  publishedAt: Date
+  channelId: string
+  title: string
+  description: string
+  thumbnails: Thumbnails
+  channelTitle: string
+  defaultLanguage: string
+  localized: Localized
+}
+
+export interface Localized {
+  title: string
+  description: string
 }

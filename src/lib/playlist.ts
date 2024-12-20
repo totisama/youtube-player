@@ -1,5 +1,16 @@
-import { PLAYLIST_URL, USER_ID } from '../constants'
-import { PlaylistVideo, VideoPlaylist } from '../types/types'
+import axios from 'axios'
+import {
+  PLAYLIST_ITEMS_URL,
+  PLAYLIST_METADATA_URL,
+  PLAYLIST_URL,
+  USER_ID,
+} from '../constants'
+import {
+  PlaylistMetadataResponse,
+  PlaylistResponse,
+  PlaylistVideo,
+  VideoPlaylist,
+} from '../types/types'
 
 export const getPlaylist = async (id: string) => {
   const response = await fetch(`${PLAYLIST_URL}/${id}`)
@@ -78,4 +89,40 @@ export const updatePlaylist = async (playlist: VideoPlaylist) => {
   console.log(response)
 
   return await response.json()
+}
+
+export const importYoutubePlaylist = async (playlistId: string) => {
+  // const API_KEY = import.meta.env.VITE_YOUTUBE_KEY
+  const API_KEY = 'AIzaSyBL5uBwlgedYYanbTLmr107HIwWwZz3s1w'
+  try {
+    // Fetch metadata and videos concurrently
+    const [playlistMetadataRes, playlistItemsRes] = await Promise.all([
+      axios.get(`${PLAYLIST_METADATA_URL}&id=${playlistId}&key=${API_KEY}`),
+      axios.get(
+        `${PLAYLIST_ITEMS_URL}&playlistId=${playlistId}&maxResults=50&key=${API_KEY}`
+      ),
+    ])
+
+    const playlistMetadata =
+      playlistMetadataRes.data as PlaylistMetadataResponse
+    const playlistItems = playlistItemsRes.data as PlaylistResponse
+
+    const playlistTitle = playlistMetadata.items[0].snippet.title
+
+    const createdPlaylist = (await createPlaylist({
+      name: playlistTitle,
+    })) as VideoPlaylist
+
+    const videoItems = playlistItems.items.map((item) => ({
+      videoId: item.snippet.resourceId.videoId,
+      title: item.snippet.title,
+      thumbnailUrl: item.snippet.thumbnails.default.url,
+    }))
+
+    createdPlaylist.videos = videoItems
+
+    await updatePlaylist(createdPlaylist)
+  } catch (error) {
+    console.error('Error fetching playlist data:', error)
+  }
 }
