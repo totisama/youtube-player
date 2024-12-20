@@ -30,6 +30,10 @@ export function SearchInput() {
 const InputContainer = styled.form`
   width: 100%;
   max-width: 400px;
+
+  @media (max-width: 768px) {
+    width: 33%;
+  }
 `
 
 const Input = styled.input`
