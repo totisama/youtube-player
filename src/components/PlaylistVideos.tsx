@@ -30,7 +30,9 @@ export const PlaylistVideos = ({
 
   return (
     <Sidebar>
-      <SidebarTitle>Playlist Videos</SidebarTitle>
+      <SidebarTitle>
+        <strong>{data?.name}</strong> playlist Videos
+      </SidebarTitle>
       <SidebarContent>
         {videos &&
           videos.length > 0 &&
