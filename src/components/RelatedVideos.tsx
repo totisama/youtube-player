@@ -31,7 +31,7 @@ export const RelatedVideos = ({ searchValue }: { searchValue: string }) => {
   )
 }
 
-const Sidebar = styled.div`
+const Sidebar = styled.aside`
   min-width: 250px;
   max-width: 300px;
   background: #2c2c2c;
@@ -39,7 +39,7 @@ const Sidebar = styled.div`
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   height: 100%;
-  max-height: 600px;
+  max-height: 100%;
 
   @media (max-width: 768px) {
     width: 100%;
@@ -57,8 +57,10 @@ const SidebarContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-height: 600px;
-  overflow-y: scroll;
+  height: 100%;
+  overflow-y: auto;
+  max-height: 500px;
+  padding-right: 5px;
 `
 
 const SidebarVideo = styled(Link)`
